@@ -4,3 +4,4 @@ Gesamtsumme: -
 Datum       Dauer       Bearbeitete Story
 09.03.22    01h30       15 (Erstellen der Projektumgebung und Git Rpository)
 16.03.22    02h00       1
+17.03.22    02h30       1
