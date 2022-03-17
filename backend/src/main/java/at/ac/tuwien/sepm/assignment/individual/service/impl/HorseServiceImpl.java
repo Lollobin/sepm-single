@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.individual.service.impl;
 
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.persistence.HorseDao;
 import at.ac.tuwien.sepm.assignment.individual.service.HorseService;
@@ -18,5 +19,14 @@ public class HorseServiceImpl implements HorseService {
     @Override
     public List<Horse> allHorses() {
         return dao.getAll();
+    }
+
+    @Override
+    public Horse save(HorseDto horseDto) {
+
+        //TODO: add logging
+        //TODO: add validation
+
+        return dao.save(horseDto);
     }
 }

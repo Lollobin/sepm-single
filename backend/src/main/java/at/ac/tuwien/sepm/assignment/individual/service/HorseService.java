@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.individual.service;
 
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 
 import java.util.List;
@@ -13,4 +14,10 @@ public interface HorseService {
      * @return list of all stored horses
      */
     List<Horse> allHorses();
+
+    /**
+     * TODO: add doc
+     * @param horseDto
+     */
+    Horse save(HorseDto horseDto);
 }
