@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.individual.entity;
 
-import at.ac.tuwien.sepm.assignment.individual.enums.Gender;
+import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 
 import java.sql.Date;
 
@@ -9,8 +9,9 @@ public class Horse {
     private String name;
     private String description;
     private java.sql.Date dateOfBirth;
-    private Gender gender;
+    private Sex sex;
     private Long ownerId;
+
     public Long getId() {
         return id;
     }
@@ -43,12 +44,12 @@ public class Horse {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Gender getGender() {
-        return gender;
+    public Sex getSex() {
+        return sex;
     }
 
-    public void setGender(Gender gender) {
-        this.gender = gender;
+    public void setSex(Sex sex) {
+        this.sex = sex;
     }
 
     public Long getOwnerId() {

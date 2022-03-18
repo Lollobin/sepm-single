@@ -11,12 +11,14 @@ import java.util.List;
 public interface HorseService {
     /**
      * Lists all horses stored in the system.
+     *
      * @return list of all stored horses
      */
     List<Horse> allHorses();
 
     /**
      * TODO: add doc
+     *
      * @param horseDto
      */
     Horse save(HorseDto horseDto);

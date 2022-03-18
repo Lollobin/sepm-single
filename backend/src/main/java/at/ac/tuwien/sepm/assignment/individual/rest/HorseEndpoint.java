@@ -27,6 +27,7 @@ public class HorseEndpoint {
 
     @GetMapping
     public Stream<HorseDto> allHorses() {
+        LOGGER.info("GET " + BASE_URL);
         return service.allHorses().stream()
                 .map(mapper::entityToDto);
     }
@@ -34,7 +35,7 @@ public class HorseEndpoint {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public HorseDto post(@RequestBody HorseDto horseDto) {
-        LOGGER.info("POST " + BASE_URL);
+        LOGGER.info("POST " + BASE_URL + " {" + horseDto.toString() + "}");
 
         return mapper.entityToDto(service.save(horseDto));
 
