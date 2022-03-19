@@ -36,5 +36,5 @@ build/
 *.log
 *.gz
 
-### Datanbases ###
+### Databases ###
 *.db
