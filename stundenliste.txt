@@ -6,3 +6,4 @@ Datum       Dauer       Bearbeitete Story
 16.03.22    02h00       1
 17.03.22    02h30       1
 18.03.22    03h00       1
+19.03.22    01h00       14
