@@ -7,8 +7,4 @@ import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
  * Contains all common properties
  */
 public record HorseDto(Long id, String name, String description, java.sql.Date dateOfBirth, Sex sex, Long ownerId) {
-
-    public HorseDto withID(Long id){
-        return new HorseDto(id, name(), description(), dateOfBirth(), sex(), ownerId());
-    }
 }

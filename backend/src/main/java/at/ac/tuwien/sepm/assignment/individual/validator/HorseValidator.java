@@ -8,16 +8,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+/**
+ * Class to validate HorseDto.
+ * Checks parameters for errors caused by wrong user input.
+ * <p>
+ * Throws ValidationException if error is detected.
+ */
 @Component
 public class HorseValidator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HorseValidator.class);
 
+    /**
+     * Validates all relevant parameters of a HorseDto.
+     * Throws ValidationException if error is detected.
+     * @param horseDto  object to be validated
+     * @return  true if all tests succeed
+     */
     public boolean validateHorse(HorseDto horseDto) {
         LOGGER.trace("Validating horse {}", horseDto);
         return validateName(horseDto.name())
                 && validateDateOfBirth(horseDto.dateOfBirth())
-                &&validateOwnerId(horseDto.ownerId());
+                && validateOwnerId(horseDto.ownerId());
     }
 
     private boolean validateName(String name) {

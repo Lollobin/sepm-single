@@ -4,6 +4,10 @@ import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 
 import java.sql.Date;
 
+/**
+ * Class for horse entities
+ * Contains all common properties
+ */
 public class Horse {
     private Long id;
     private String name;

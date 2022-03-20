@@ -17,9 +17,10 @@ public interface HorseService {
     List<Horse> allHorses();
 
     /**
-     * TODO: add doc
+     * Validates horse and forwards it for saving in database.
      *
-     * @param horseDto
+     * @param horseDto the horse to be validated and saved
+     * @return horse with generated ID
      */
     Horse save(HorseDto horseDto);
 }

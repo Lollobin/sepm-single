@@ -58,7 +58,10 @@ public class HorseJdbcDao implements HorseDao {
         }, keyHolder);
 
         HorseMapper mapper = new HorseMapper();
-        return mapper.dtoToEntity(horseDto.withID(((Number) keyHolder.getKeys().get("id")).longValue()));
+
+        Horse horse = mapper.dtoToEntity(horseDto);
+        horse.setId(((Number) keyHolder.getKeys().get("id")).longValue());
+        return horse;
     }
 
     private Horse mapRow(ResultSet result, int rownum) throws SQLException {

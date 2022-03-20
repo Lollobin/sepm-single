@@ -13,6 +13,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.stream.Stream;
 
+/**
+ * Endpoint for horses.
+ * Implements access and communication to rest layer regarding horses.
+ */
 @RestController
 @RequestMapping(HorseEndpoint.BASE_URL)
 public class HorseEndpoint {
@@ -27,6 +31,11 @@ public class HorseEndpoint {
         this.mapper = mapper;
     }
 
+    /**
+     * Returns all horses.
+     *
+     * @return all horses that are currently in the database.
+     */
     @GetMapping
     public Stream<HorseDto> allHorses() {
         LOGGER.info("GET " + BASE_URL);
@@ -34,6 +43,12 @@ public class HorseEndpoint {
                 .map(mapper::entityToDto);
     }
 
+    /**
+     * Store a horse in the database.
+     *
+     * @param horseDto data transfer object of horse
+     * @return horseDto resembling the stored horse with generated ID
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public HorseDto post(@RequestBody HorseDto horseDto) {

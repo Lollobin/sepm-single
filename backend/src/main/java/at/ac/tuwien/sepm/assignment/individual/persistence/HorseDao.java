@@ -12,14 +12,16 @@ import java.util.List;
 public interface HorseDao {
     /**
      * Get all horses stored in the persistent data store.
+     *
      * @return a list of all stored horses
      */
     List<Horse> getAll();
 
     /**
-     * TODO: add doc
-     * @param horseDto
-     * @return
+     * Save a single horse in the persistent data store.
+     *
+     * @param horseDto data transfer object of horse to be saved
+     * @return corresponding entity with generated ID
      */
     Horse save(HorseDto horseDto);
 }

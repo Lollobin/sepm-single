@@ -22,13 +22,14 @@ public class DataGeneratorBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final DataSource dataSource;
 
-    /**
-     * Executed once when the component is instantiated. Inserts some dummy data.
-     */
+
     public DataGeneratorBean(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Executed once when the component is instantiated. Inserts some dummy data.
+     */
     @PostConstruct
     public void generateData() throws SQLException {
         LOGGER.info("Generating data…");
