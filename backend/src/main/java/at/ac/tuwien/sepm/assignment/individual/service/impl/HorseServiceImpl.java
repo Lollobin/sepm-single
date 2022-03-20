@@ -33,13 +33,8 @@ public class HorseServiceImpl implements HorseService {
 
     @Override
     public Horse save(HorseDto horseDto) {
-
         LOGGER.info("Saving {}", horseDto.toString());
-
-        if (VALIDATOR.validateHorse(horseDto)){
-            return dao.save(horseDto);
-        }else{
-            throw new ServiceException("Error validating horse data");
-        }
+        VALIDATOR.validateHorse(horseDto);
+        return dao.save(horseDto);
     }
 }

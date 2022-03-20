@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.individual.rest;
 
+import at.ac.tuwien.sepm.assignment.individual.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
 import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
@@ -41,9 +42,8 @@ public class HorseEndpoint {
         try {
             return mapper.entityToDto(service.save(horseDto));
         } catch (ValidationException e) {
-            ResponseStatusException exception = new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Error during saving horse", e);
-            LOGGER.error(exception.toString());
-            throw exception;
+            LOGGER.error(e.toString());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Parameters are not valid", e);
         }
     }
 }

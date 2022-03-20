@@ -37,11 +37,7 @@ public class HorseJdbcDao implements HorseDao {
     @Override
     public List<Horse> getAll() {
         LOGGER.info("Getting all horses");
-        try {
-            return jdbcTemplate.query(SQL_SELECT_ALL, this::mapRow);
-        } catch (DataAccessException e) {
-            throw new PersistenceException("Could not query all horses", e);
-        }
+        return jdbcTemplate.query(SQL_SELECT_ALL, this::mapRow);
     }
 
     @Override
@@ -58,7 +54,6 @@ public class HorseJdbcDao implements HorseDao {
             stmt.setString(3, horseDto.dateOfBirth().toString());
             stmt.setString(4, horseDto.sex().toString());
             stmt.setString(5, horseDto.ownerId().toString());
-
             return stmt;
         }, keyHolder);
 
@@ -67,6 +62,7 @@ public class HorseJdbcDao implements HorseDao {
     }
 
     private Horse mapRow(ResultSet result, int rownum) throws SQLException {
+        LOGGER.trace("Mapping row {} onto horse", rownum);
         Horse horse = new Horse();
         horse.setId(result.getLong("id"));
         horse.setName(result.getString("name"));
