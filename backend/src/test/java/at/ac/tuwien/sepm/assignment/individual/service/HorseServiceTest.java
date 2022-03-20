@@ -12,8 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@ActiveProfiles({"test", "datagen"})
-// enable "test" spring profile during test execution in order to pick up configuration from application-test.yml
+@ActiveProfiles({"test", "datagen"}) // enable "test" spring profile during test execution in order to pick up configuration from application-test.yml
 @SpringBootTest
 public class HorseServiceTest {
 
