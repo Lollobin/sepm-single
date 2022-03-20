@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.rest;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
+import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,6 +53,10 @@ public class HorseEndpointTest {
     assertThat(horseResult.size()).isEqualTo(1);
     assertThat(horseResult.get(0).id()).isEqualTo(-1);
     assertThat(horseResult.get(0).name()).isEqualTo("Wendy");
+    assertThat(horseResult.get(0).description()).isEqualTo("Wendy is a great horse");
+    assertThat(horseResult.get(0).dateOfBirth()).isEqualTo("2005-04-03");
+    assertThat(horseResult.get(0).sex()).isEqualTo(Sex.female);
+    assertThat(horseResult.get(0).id()).isEqualTo(1);
   }
 
   @Test
