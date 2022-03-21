@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 
 import {HorseService} from "../service/horse.service";
 
@@ -12,10 +12,10 @@ import {HorseService} from "../service/horse.service";
 export class HorseFormComponent implements OnInit {
 
   horseForm = this.formBuilder.group({
-    name: '',
+    name: ['', Validators.required],
     description: '',
     dateOfBirth: {year: 2000, month: 1, day: 1},
-    sex: ''
+    sex: 'male'
   })
 
   constructor(
@@ -41,4 +41,6 @@ export class HorseFormComponent implements OnInit {
     //console.info('The horse has been submitted', this.horseForm.value);
     //this.horseForm.reset();
   }
+
+  get name() { return this.horseForm.get('name'); }
 }
