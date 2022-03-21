@@ -5,23 +5,26 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './component/header/header.component';
 import {HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HorseComponent} from './component/horse/horse.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { HorseFormComponent } from './horse-form/horse-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     HorseComponent,
+    HorseFormComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    NgbModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        NgbModule,
+        ReactiveFormsModule,
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

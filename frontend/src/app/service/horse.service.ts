@@ -23,4 +23,9 @@ export class HorseService {
   getAll(): Observable<Horse[]> {
     return this.http.get<Horse[]>(baseUri);
   }
+
+  submit(horse: Horse): Observable<Horse>{
+    return this.http.post<Horse>(baseUri, horse);
+  }
+
 }

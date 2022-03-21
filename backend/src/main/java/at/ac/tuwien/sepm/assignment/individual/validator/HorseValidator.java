@@ -49,6 +49,11 @@ public class HorseValidator {
 
     private boolean validateDateOfBirth(java.sql.Date dateOfBirth) {
         LOGGER.trace("Validating dateOfBirth '{}'", dateOfBirth);
+
+        if(dateOfBirth == null){
+            throw new ValidationException("Date of birth cannot be null");
+        }
+
         if (dateOfBirth.after(new java.sql.Date(System.currentTimeMillis()))) {
             throw new ValidationException("Date of birth cannot be in the future");
         }
@@ -57,7 +62,8 @@ public class HorseValidator {
     }
 
     private boolean validateOwnerId(Long ownerId) {
-        LOGGER.trace("Validating ownerId '{}'", ownerId);
+
+        //LOGGER.trace("Validating ownerId '{}'", ownerId);
         //todo add check if owner exists
 
         return true;

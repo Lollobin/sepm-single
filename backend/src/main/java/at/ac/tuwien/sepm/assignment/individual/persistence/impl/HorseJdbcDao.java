@@ -53,7 +53,7 @@ public class HorseJdbcDao implements HorseDao {
             stmt.setString(2, horseDto.description());
             stmt.setString(3, horseDto.dateOfBirth().toString());
             stmt.setString(4, horseDto.sex().toString());
-            stmt.setString(5, horseDto.ownerId().toString());
+            stmt.setString(5, horseDto.ownerId() == null ? null : horseDto.ownerId().toString());
             return stmt;
         }, keyHolder);
 

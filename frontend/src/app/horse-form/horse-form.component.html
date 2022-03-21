@@ -1,0 +1,38 @@
+<div class="flex-horizontal full-width mt-3">
+  <button class="btn btn-light mr-1" (click)="goBack()">&#8592;</button>
+</div>
+
+
+<h2>Create a new horse entry</h2>
+
+<form [formGroup]="horseForm" (ngSubmit)="onSubmit()">
+
+  <div>
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" formControlName="name">
+  </div>
+
+  <div>
+    <label for="description">Description:</label><br>
+    <textarea id="description" formControlName = "description"></textarea><br>
+  </div>
+
+<div>
+  <label for="dateOfBirth">Date of birth:</label><br>
+  <input type="date" id="dateOfBirth" formControlName="dateOfBirth"><br>
+</div>
+
+<div>
+  <input type="radio" id="male" formControlName="sex" value="male">
+  <label for="male">male</label><br>
+  <input type="radio" id="female" formControlName="sex" value="female">
+  <label for="female">female</label><br>
+</div>
+
+<div>
+  <p>[Placeholder for Owner]</p>
+</div>
+
+
+  <button class="button" type="submit">Submit</button>
+</form>
