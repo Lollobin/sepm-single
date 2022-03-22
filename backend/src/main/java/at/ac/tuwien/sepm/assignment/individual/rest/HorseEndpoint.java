@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.individual.rest;
 
+import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
 import at.ac.tuwien.sepm.assignment.individual.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
 import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
@@ -43,6 +44,17 @@ public class HorseEndpoint {
                 .map(mapper::entityToDto);
     }
 
+    @GetMapping(value = "/{id}")
+    public HorseDto getOneById(@PathVariable("id") Long id) {
+        LOGGER.info("GET " + BASE_URL + "/{}", id);
+        try {
+            return mapper.entityToDto(service.getOneById(id));
+        } catch (NotFoundException e) {
+            LOGGER.error(e.toString());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error during reading horse", e);
+        }
+    }
+
     /**
      * Store a horse in the database.
      *
@@ -59,6 +71,29 @@ public class HorseEndpoint {
         } catch (ValidationException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Parameters are not valid", e);
+        }
+    }
+
+    /**
+     * Edit a horse by ID in the database
+     *
+     * @param horseId  ID of horse to be edited
+     * @param horseDto new data for horse (ID is ignored)
+     * @return horseDto resembling the edited horse
+     */
+    @PutMapping("/{horseId}")
+    @ResponseStatus(HttpStatus.OK)
+    public HorseDto put(@PathVariable Long horseId, @RequestBody HorseDto horseDto) {
+        LOGGER.info("PUT " + BASE_URL + "/" + horseId + " {" + horseDto.toString() + "}");
+
+        try {
+            return mapper.entityToDto(service.update(horseId, horseDto));
+        } catch (ValidationException e) {
+            LOGGER.error(e.toString());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Parameters are not valid", e);
+        }catch (NotFoundException e) {
+            LOGGER.error(e.toString());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error during reading horse", e);
         }
     }
 }

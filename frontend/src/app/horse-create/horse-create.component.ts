@@ -6,10 +6,10 @@ import {HorseService} from "../service/horse.service";
 
 @Component({
   selector: 'app-horse-form',
-  templateUrl: './horse-form.component.html',
-  styleUrls: ['./horse-form.component.scss']
+  templateUrl: './horse-create.component.html',
+  styleUrls: ['./horse-create.component.scss']
 })
-export class HorseFormComponent implements OnInit {
+export class HorseCreateComponent implements OnInit {
 
   horseForm = this.formBuilder.group({
     name: ['', Validators.required],

@@ -23,4 +23,22 @@ public interface HorseService {
      * @return horse with generated ID
      */
     Horse save(HorseDto horseDto);
+
+    /**
+     * Validates parameters of horseDto and checks if horse with "horseId" exists.
+     * Forwards it to persistence layer for updating
+     *
+     * @param horseId ID of horse to be updated
+     * @param horseDto new data for horse
+     * @return updated horse
+     */
+    Horse update(Long horseId, HorseDto horseDto);
+
+    /**
+     * Get horse with the given id.
+     *
+     * @param id ID of horse to be fetched
+     * @return horse with id
+     */
+    Horse getOneById(Long id);
 }

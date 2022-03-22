@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.individual.persistence.impl;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
+import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
 import at.ac.tuwien.sepm.assignment.individual.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
 import at.ac.tuwien.sepm.assignment.individual.persistence.HorseDao;
@@ -14,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +29,7 @@ public class HorseJdbcDao implements HorseDao {
     private static final String TABLE_NAME = "horse";
     private static final Logger LOGGER = LoggerFactory.getLogger(HorseJdbcDao.class);
     private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLE_NAME;
+    private static final HorseMapper MAPPER = new HorseMapper();
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -57,11 +60,49 @@ public class HorseJdbcDao implements HorseDao {
             return stmt;
         }, keyHolder);
 
-        HorseMapper mapper = new HorseMapper();
-
-        Horse horse = mapper.dtoToEntity(horseDto);
+        Horse horse = MAPPER.dtoToEntity(horseDto);
         horse.setId(((Number) keyHolder.getKeys().get("id")).longValue());
         return horse;
+    }
+
+    @Override
+    public Horse update(Long horseId, HorseDto horseDto) {
+        LOGGER.info("Updating horse with ID {} to match {}", horseId, horseDto);
+
+        this.getOneById(horseId);
+
+        final String sql = "UPDATE " + TABLE_NAME +
+                " SET name = ?, description = ?, dateOfBirth = ?, sex = ?, ownerId = ?" +
+                " WHERE id = ?;";
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, horseDto.name());
+            stmt.setString(2, horseDto.description());
+            stmt.setString(3, horseDto.dateOfBirth().toString());
+            stmt.setString(4, horseDto.sex().toString());
+            stmt.setString(5, horseDto.ownerId() == null ? null : horseDto.ownerId().toString());
+            stmt.setString(6, horseId.toString());
+            return stmt;
+        });
+
+        Horse horse = MAPPER.dtoToEntity(horseDto);
+        horse.setId(horseId);
+
+        return horse;
+    }
+
+    @Override
+    public Horse getOneById(Long id) {
+        LOGGER.info("Get horse with id {}", id);
+
+        final String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id=?";
+        List<Horse> horses = jdbcTemplate.query(sql,this::mapRow,id);
+        if(horses.isEmpty()){
+            throw new NotFoundException(String.format("Could not find horse with id %s", id));
+        }
+
+        return horses.get(0);
     }
 
     private Horse mapRow(ResultSet result, int rownum) throws SQLException {

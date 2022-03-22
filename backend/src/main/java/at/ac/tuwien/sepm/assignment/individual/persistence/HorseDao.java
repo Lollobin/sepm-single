@@ -24,4 +24,21 @@ public interface HorseDao {
      * @return corresponding entity with generated ID
      */
     Horse save(HorseDto horseDto);
+
+    /**
+     * Update horse with ID 'horseId' in persistent data store to match 'horseDto'.
+     *
+     * @param horseId ID of horse to be updated
+     * @param horseDto data to update horse with
+     * @return horse with updated parameters
+     */
+  Horse update(Long horseId, HorseDto horseDto);
+
+    /**
+     * Get horse with the given id in the persistent data store.
+     *
+     * @param id ID oh horse to return
+     * @return horse with the given id
+     */
+  Horse getOneById(Long id);
 }

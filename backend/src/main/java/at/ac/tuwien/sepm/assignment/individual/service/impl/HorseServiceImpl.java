@@ -37,4 +37,18 @@ public class HorseServiceImpl implements HorseService {
         VALIDATOR.validateHorse(horseDto);
         return dao.save(horseDto);
     }
+
+    @Override
+    public Horse update(Long horseId, HorseDto horseDto) {
+        LOGGER.info("Updating horse with ID {} to match {}", horseId, horseDto);
+        VALIDATOR.validateHorse(horseDto);
+        //todo add check if horse with ID exists
+        return dao.update(horseId, horseDto);
+    }
+
+    @Override
+    public Horse getOneById(Long id) {
+        LOGGER.info("Get horse with id {}", id);
+        return dao.getOneById(id);
+    }
 }
