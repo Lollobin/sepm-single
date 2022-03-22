@@ -41,4 +41,11 @@ public interface HorseDao {
      * @return horse with the given id
      */
   Horse getOneById(Long id);
+
+    /**
+     * Delete horse wit id from the persistent data store.
+     *
+     * @param id id of horse to be deleted.
+     */
+  void delete(Long id);
 }

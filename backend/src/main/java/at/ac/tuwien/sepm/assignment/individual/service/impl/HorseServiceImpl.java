@@ -51,4 +51,10 @@ public class HorseServiceImpl implements HorseService {
         LOGGER.info("Get horse with id {}", id);
         return dao.getOneById(id);
     }
+
+    @Override
+    public void delete(Long id) {
+        LOGGER.info("Delete horse with id {}", id);
+        dao.delete(id);
+    }
 }

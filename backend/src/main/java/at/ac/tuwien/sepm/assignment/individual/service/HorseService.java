@@ -37,8 +37,16 @@ public interface HorseService {
     /**
      * Get horse with the given id.
      *
-     * @param id ID of horse to be fetched
-     * @return horse with id
+     * @param id id of horse to be fetched.
+     * @return horse with id.
      */
     Horse getOneById(Long id);
+
+
+    /**
+     * Delete horse with id in database
+     *
+     * @param id id of horse to be deleted.
+     */
+    void delete(Long id);
 }

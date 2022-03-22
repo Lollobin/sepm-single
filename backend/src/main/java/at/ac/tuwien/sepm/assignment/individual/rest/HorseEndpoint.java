@@ -96,4 +96,22 @@ public class HorseEndpoint {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error during reading horse", e);
         }
     }
+
+    /**
+     * Delete horse with id.
+     *
+     * @param horseId id of horse to be deleted.
+     */
+    @DeleteMapping("/{horseId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long horseId){
+        LOGGER.info("DELETE " + BASE_URL + "/" + horseId);
+
+        try {
+            service.delete(horseId);
+        }catch (NotFoundException e) {
+            LOGGER.error(e.toString());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find horse to delete", e);
+        }
+    }
 }

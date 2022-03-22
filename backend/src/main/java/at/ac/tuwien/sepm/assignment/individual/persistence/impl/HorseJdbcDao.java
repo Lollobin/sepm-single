@@ -97,12 +97,24 @@ public class HorseJdbcDao implements HorseDao {
         LOGGER.info("Get horse with id {}", id);
 
         final String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id=?";
-        List<Horse> horses = jdbcTemplate.query(sql,this::mapRow,id);
-        if(horses.isEmpty()){
+        List<Horse> horses = jdbcTemplate.query(sql, this::mapRow, id);
+        if (horses.isEmpty()) {
             throw new NotFoundException(String.format("Could not find horse with id %s", id));
         }
 
         return horses.get(0);
+    }
+
+    @Override
+    public void delete(Long id) {
+        LOGGER.info("Delete horse with id {}", id);
+
+        final String sql = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
+        int status = jdbcTemplate.update(sql, id.toString());
+
+        if(status!=1){
+            throw new NotFoundException(String.format("Could not find horse with id %s", id));
+        }
     }
 
     private Horse mapRow(ResultSet result, int rownum) throws SQLException {
