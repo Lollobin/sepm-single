@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {FormBuilder, Validators} from '@angular/forms';
 
-import {HorseService} from "../service/horse.service";
+import {HorseService} from "../../service/horse.service";
 
 @Component({
   selector: 'app-horse-create',

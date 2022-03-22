@@ -13,7 +13,8 @@
     <tr *ngFor="let horse of horses">
       <td>{{horse.name}}</td>
       <td>
-        <button class="btn btn-light mr-1" id={{horse.id}} [routerLink]="['/horses', horse.id, 'edit']">Edit</button>
+        <button class="btn btn-light mr-1" id="{{'edit'+horse.id}}" [routerLink]="['/horses', horse.id, 'edit']">Edit</button>
+        <button class="btn btn-light mr-1" id="{{'delete'+horse.id}}" [routerLink]="['/horses', horse.id, 'delete']">Delete</button>
       </td>
     </tr>
     </tbody>

@@ -8,9 +8,10 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HorseComponent} from './component/horse/horse.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {HorseCreateComponent} from './horse-create/horse-create.component';
+import {HorseCreateComponent} from './component/horse-create/horse-create.component';
 import {MessageComponent} from './component/message/message.component';
-import { HorseEditComponent } from './horse-edit/horse-edit.component';
+import { HorseEditComponent } from './component/horse-edit/horse-edit.component';
+import { HorseDeleteComponent } from './component/horse-delete/horse-delete.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { HorseEditComponent } from './horse-edit/horse-edit.component';
     HorseCreateComponent,
     MessageComponent,
     HorseEditComponent,
+    HorseDeleteComponent,
   ],
   imports: [
     BrowserModule,

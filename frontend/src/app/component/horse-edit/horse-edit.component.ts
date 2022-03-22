@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Horse} from "../dto/horse";
+import {Horse} from "../../dto/horse";
 import {Location} from "@angular/common";
-import {HorseService} from "../service/horse.service";
+import {HorseService} from "../../service/horse.service";
 import {FormBuilder, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
 

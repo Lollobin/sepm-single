@@ -27,7 +27,7 @@ export class HorseService {
   getAll(): Observable<Horse[]> {
     return this.http.get<Horse[]>(baseUri)
       .pipe(
-        tap(_=>this.log('fetched horses')),
+        tap(_ => this.log('fetched horses')),
         catchError(this.handleError<Horse[]>('getAll', [])));
   }
 
@@ -36,10 +36,10 @@ export class HorseService {
    *
    * @param id id of horse to be fetched.
    */
-  getOneById(id: BigInteger):Observable<Horse>{
-    return this.http.get<Horse>(baseUri+"/"+id)
+  getOneById(id: BigInteger): Observable<Horse> {
+    return this.http.get<Horse>(baseUri + "/" + id)
       .pipe(
-        tap(_=>this.log('fetching horse with id ' + id)),
+        tap(_ => this.log('fetching horse with id ' + id)),
         catchError(this.handleError<Horse>('getOneById'))
       )
   }
@@ -60,9 +60,15 @@ export class HorseService {
    * @param id id of horse to be edited.
    * @param horse new data for horse.
    */
-  edit(id:bigint, horse: Horse):Observable<Horse>{
-    return this.http.put<Horse>(baseUri+"/"+id,horse)
+  edit(id: bigint, horse: Horse): Observable<Horse> {
+    return this.http.put<Horse>(baseUri + "/" + id, horse)
       .pipe(catchError(this.handleError<Horse>('edit')))
+  }
+
+  delete(id: bigint): Observable<void> {
+    this.log("deleting horse with id " + id)
+    return this.http.delete<void>(baseUri + "/" + id)
+      .pipe(catchError(this.handleError<void>('delete')));
   }
 
   /**
@@ -75,7 +81,7 @@ export class HorseService {
     return (error: any): Observable<T> => {
       console.error(error);
 
-      switch (error.status){
+      switch (error.status) {
         case 422:
           this.log('Submit failed because of invalid input.')
           break;
@@ -85,6 +91,7 @@ export class HorseService {
       }
     };
   }
+
   log(message: string) {
     this.messageService.add(`${message}`);
   }
