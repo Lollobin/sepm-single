@@ -5,7 +5,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {HorseService} from "../service/horse.service";
 
 @Component({
-  selector: 'app-horse-form',
+  selector: 'app-horse-create',
   templateUrl: './horse-create.component.html',
   styleUrls: ['./horse-create.component.scss']
 })

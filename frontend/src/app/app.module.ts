@@ -8,16 +8,18 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HorseComponent} from './component/horse/horse.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {HorseFormComponent} from './horse-form/horse-form.component';
+import {HorseCreateComponent} from './horse-create/horse-create.component';
 import {MessageComponent} from './component/message/message.component';
+import { HorseEditComponent } from './horse-edit/horse-edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     HorseComponent,
-    HorseFormComponent,
+    HorseCreateComponent,
     MessageComponent,
+    HorseEditComponent,
   ],
   imports: [
     BrowserModule,
