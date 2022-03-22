@@ -31,14 +31,42 @@ export class HorseService {
         catchError(this.handleError<Horse[]>('getAll', [])));
   }
 
-  submit(horse: Horse): Observable<Horse> {
+  /**
+   * Get horse with id from the database
+   *
+   * @param id id of horse to be fetched.
+   */
+  getOneById(id: BigInteger):Observable<Horse>{
+    return this.http.get<Horse>(baseUri+"/"+id)
+      .pipe(
+        tap(_=>this.log('fetching horse with id ' + id)),
+        catchError(this.handleError<Horse>('getOneById'))
+      )
+  }
+
+  /**
+   * Sends horse to server to be created.
+   *
+   * @param horse data of horse to be created.
+   */
+  create(horse: Horse): Observable<Horse> {
     return this.http.post<Horse>(baseUri, horse)
-      .pipe(catchError(this.handleError<Horse>('submit')));
+      .pipe(catchError(this.handleError<Horse>('create')));
+  }
+
+  /**
+   * Sends data to update a specific horse to server.
+   *
+   * @param id id of horse to be edited.
+   * @param horse new data for horse.
+   */
+  edit(id:bigint, horse: Horse):Observable<Horse>{
+    return this.http.put<Horse>(baseUri+"/"+id,horse)
+      .pipe(catchError(this.handleError<Horse>('edit')))
   }
 
   /**
    * Handle Http operation that failed.
-   * Let the app continue.
    *
    * @param operation - name of the operation that failed
    * @param result - optional value to return as the observable result
@@ -57,7 +85,7 @@ export class HorseService {
       }
     };
   }
-  private log(message: string) {
+  log(message: string) {
     this.messageService.add(`${message}`);
   }
 }

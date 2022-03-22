@@ -33,7 +33,7 @@ export class HorseCreateComponent implements OnInit {
   }
 
   onSubmit(): void{
-    this.horseService.submit({
+    this.horseService.create({
       ...this.horseForm.value,
       dateOfBirth: new Date(this.horseForm.value.dateOfBirth)
     }).subscribe({next: (horse) => console.log(horse)})
