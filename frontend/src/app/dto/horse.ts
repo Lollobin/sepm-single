@@ -1,9 +1,11 @@
 export interface Horse {
-  id?: number;
+  id?: bigint;
   name: string;
   description?: string;
   dateOfBirth: Date;
   sex: Sex;
+  fatherId?: bigint;
+  motherId?: bigint;
 }
 
 type Sex = "male" | "female";

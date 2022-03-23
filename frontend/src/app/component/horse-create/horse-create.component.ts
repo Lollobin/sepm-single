@@ -3,6 +3,9 @@ import {Location} from '@angular/common';
 import {FormBuilder, Validators} from '@angular/forms';
 
 import {HorseService} from "../../service/horse.service";
+import {Horse} from "../../dto/horse";
+import {debounceTime, distinctUntilChanged, Observable, of, switchMap} from "rxjs";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-horse-create',
@@ -14,9 +17,28 @@ export class HorseCreateComponent implements OnInit {
   horseForm = this.formBuilder.group({
     name: ['', Validators.required],
     description: '',
-    dateOfBirth: {year: 2000, month: 1, day: 1},
-    sex: 'male'
+    dateOfBirth: ['', Validators.required],
+    sex: ['male',Validators.required],
+    father: '',
+    mother: ''
   })
+  formatter = (result:Horse)=> result.name;
+
+  searchFather = (searchText: Observable<string>) => searchText.pipe(
+    debounceTime(250),
+    distinctUntilChanged(),
+    switchMap((text) => this.horseService.searchParent(
+      this.horseForm.valid ? this.horseForm.value.dateOfBirth : undefined,
+      'male',
+      text))).pipe(catchError(() => of([])));
+
+  searchMother = (searchText: Observable<string>) => searchText.pipe(
+    debounceTime(250),
+    distinctUntilChanged(),
+    switchMap((text) => this.horseService.searchParent(
+      this.horseForm.valid ? this.horseForm.value.dateOfBirth : undefined,
+      'female',
+      text))).pipe(catchError(() => of([])));
 
   constructor(
     private location: Location,
@@ -32,15 +54,26 @@ export class HorseCreateComponent implements OnInit {
     this.location.back();
   }
 
-  onSubmit(): void{
-    this.horseService.create({
-      ...this.horseForm.value,
-      dateOfBirth: new Date(this.horseForm.value.dateOfBirth)
-    }).subscribe({next: (horse) => console.log(horse)})
+  onSubmit(): void {
+    const value = this.horseForm.value;
+
+    let horse: Horse = {
+      name: value.name,
+      description: value.description,
+      dateOfBirth: value.dateOfBirth,
+      sex: value.sex,
+      fatherId: value.father.id
+    }
+
+    this.horseService.create(horse)
+      .subscribe({next: (horse) => console.log(horse)})
 
     //console.info('The horse has been submitted', this.horseForm.value);
-    //this.horseForm.reset();
+    this.horseForm.reset();
+    this.goBack();
   }
 
-  get name() { return this.horseForm.get('name'); }
+  get name() {
+    return this.horseForm.get('name');
+  }
 }

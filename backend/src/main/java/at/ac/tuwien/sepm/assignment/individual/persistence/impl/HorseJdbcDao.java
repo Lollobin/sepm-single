@@ -119,14 +119,15 @@ public class HorseJdbcDao implements HorseDao {
         LOGGER.info("Getting possible " + parentSex + " parents of Horse(" + dateOfBirth + "): " + searchString);
 
         final String sql = "SELECT * FROM " + TABLE_NAME +
-                " WHERE LOWER(name) LIKE ?"+
-                " AND sex = ?"+
-                " AND dateOfBirth <= ?";
+                " WHERE LOWER(name) LIKE ?" +
+                " AND sex = ?" +
+                " AND dateOfBirth <= ?" +
+                "LIMIT 5";
 
         return jdbcTemplate.query(sql, this::mapRow,
                 "%" + searchString.toLowerCase() + "%",
                 parentSex.toString(),
-                dateOfBirth).subList(0,4);
+                dateOfBirth);
     }
 
     private Horse mapRow(ResultSet result, int rownum) throws SQLException {

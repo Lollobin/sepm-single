@@ -1,4 +1,4 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {environment} from 'src/environments/environment';
@@ -65,6 +65,26 @@ export class HorseService {
       .pipe(catchError(this.handleError<Horse>('edit')))
   }
 
+  /**
+   * todo add doc
+   * @param dateOfBirth
+   * @param parentSex
+   * @param searchString
+   */
+  searchParent(dateOfBirth: Date, parentSex: string, searchString: string): Observable<Horse[]> {
+    let queryParams = new HttpParams()
+      .append("dateOfBirth", dateOfBirth.toString())
+      .append("parentSex", parentSex)
+      .append("searchString", searchString);
+
+    return this.http.get<Horse[]>(baseUri, {params: queryParams})
+      .pipe(catchError(this.handleError<Horse[]>('getAll', [])));
+  }
+
+  /**
+   * todo add doc
+   * @param id
+   */
   delete(id: bigint): Observable<void> {
     this.log("deleting horse with id " + id)
     return this.http.delete<void>(baseUri + "/" + id)

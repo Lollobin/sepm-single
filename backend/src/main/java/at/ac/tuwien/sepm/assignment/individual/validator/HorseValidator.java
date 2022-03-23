@@ -72,7 +72,7 @@ public class HorseValidator {
             Horse father = dao.getOneById(fatherId);
             if (father.getSex() == Sex.female)
                 throw new ValidationException("Father has to be male");
-            if (father.getDateOfBirth().before(dateOfBirth))
+            if (father.getDateOfBirth().after(dateOfBirth))
                 throw new ValidationException("Father cannot be younger than horse");
         }
 
@@ -80,7 +80,7 @@ public class HorseValidator {
             Horse mother = dao.getOneById(motherId);
             if (mother.getSex() == Sex.male)
                 throw new ValidationException("Mother has to be female");
-            if (mother.getDateOfBirth().before(dateOfBirth))
+            if (mother.getDateOfBirth().after(dateOfBirth))
                 throw new ValidationException("Mother cannot be younger than horse");
         }
     }
