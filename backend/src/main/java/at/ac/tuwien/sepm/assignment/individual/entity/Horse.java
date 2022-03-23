@@ -15,6 +15,10 @@ public class Horse {
     private java.sql.Date dateOfBirth;
     private Sex sex;
     private Long ownerId;
+    private Long fatherId;
+
+
+    private Long motherId;
 
     public Long getId() {
         return id;
@@ -64,5 +68,19 @@ public class Horse {
         this.ownerId = ownerId;
     }
 
+    public Long getFatherId() {
+        return fatherId;
+    }
 
+    public void setFatherId(Long fatherId) {
+        this.fatherId = fatherId;
+    }
+
+    public Long getMotherId() {
+        return motherId;
+    }
+
+    public void setMotherId(Long motherId) {
+        this.motherId = motherId;
+    }
 }

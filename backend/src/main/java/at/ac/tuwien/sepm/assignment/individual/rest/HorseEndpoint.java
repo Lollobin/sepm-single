@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.rest;
 
+import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
+import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
 import at.ac.tuwien.sepm.assignment.individual.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
@@ -91,7 +93,7 @@ public class HorseEndpoint {
         } catch (ValidationException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Parameters are not valid", e);
-        }catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error during reading horse", e);
         }
@@ -104,14 +106,21 @@ public class HorseEndpoint {
      */
     @DeleteMapping("/{horseId}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable Long horseId){
+    public void delete(@PathVariable Long horseId) {
         LOGGER.info("DELETE " + BASE_URL + "/" + horseId);
 
         try {
             service.delete(horseId);
-        }catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find horse to delete", e);
         }
+    }
+
+    @GetMapping(params = {"dateOfBirth", "parentSex", "searchString"})
+    public Stream<HorseDto> searchParent(@RequestParam java.sql.Date dateOfBirth, @RequestParam Sex parentSex, @RequestParam String searchString) {
+        LOGGER.info("GET " + BASE_URL);
+        return service.searchParent(dateOfBirth, parentSex, searchString).stream()
+                .map(mapper::entityToDto);
     }
 }

@@ -25,7 +25,7 @@ public class HorseMapper {
         LOGGER.trace("Converting entity to dto: {}", horse);
 
         return new HorseDto(horse.getId(), horse.getName(), horse.getDescription(),
-                horse.getDateOfBirth(), horse.getSex(), horse.getOwnerId());
+                horse.getDateOfBirth(), horse.getSex(), horse.getOwnerId(), horse.getFatherId(), horse.getMotherId());
     }
 
 
@@ -45,6 +45,8 @@ public class HorseMapper {
         horse.setDateOfBirth(horseDto.dateOfBirth());
         horse.setSex(horseDto.sex());
         horse.setOwnerId(horseDto.ownerId());
+        horse.setFatherId(horseDto.fatherId());
+        horse.setMotherId(horseDto.motherId());
         return horse;
     }
 }

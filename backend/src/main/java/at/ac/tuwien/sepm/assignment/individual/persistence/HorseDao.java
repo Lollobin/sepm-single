@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.individual.persistence;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
+import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 
 import java.util.List;
 
@@ -48,4 +49,13 @@ public interface HorseDao {
      * @param id id of horse to be deleted.
      */
   void delete(Long id);
+
+    /**
+     * todo add doc
+     * @param dateOfBirth
+     * @param parentSex
+     * @param searchString
+     * @return
+     */
+  List<Horse> searchParent(java.sql.Date dateOfBirth, Sex parentSex, String searchString);
 }

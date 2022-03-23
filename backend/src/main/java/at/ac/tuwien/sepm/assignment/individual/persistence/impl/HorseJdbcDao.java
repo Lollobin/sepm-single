@@ -4,23 +4,16 @@ import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
-import at.ac.tuwien.sepm.assignment.individual.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
 import at.ac.tuwien.sepm.assignment.individual.persistence.HorseDao;
-import at.ac.tuwien.sepm.assignment.individual.rest.HorseEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 @Repository
@@ -47,8 +40,8 @@ public class HorseJdbcDao implements HorseDao {
     public Horse save(HorseDto horseDto) {
         LOGGER.info("Saving {}", horseDto.toString());
         final String sql = "INSERT INTO " + TABLE_NAME +
-                " (name, description, dateOfBirth, sex, ownerId)" +
-                " VALUES (?, ?, ?, ?, ?);";
+                " (name, description, dateOfBirth, sex, ownerId, fatherId, motherId)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -57,6 +50,8 @@ public class HorseJdbcDao implements HorseDao {
             stmt.setString(3, horseDto.dateOfBirth().toString());
             stmt.setString(4, horseDto.sex().toString());
             stmt.setString(5, horseDto.ownerId() == null ? null : horseDto.ownerId().toString());
+            stmt.setString(6, horseDto.fatherId() == null ? null : horseDto.fatherId().toString());
+            stmt.setString(7, horseDto.motherId() == null ? null : horseDto.motherId().toString());
             return stmt;
         }, keyHolder);
 
@@ -72,7 +67,7 @@ public class HorseJdbcDao implements HorseDao {
         this.getOneById(horseId);
 
         final String sql = "UPDATE " + TABLE_NAME +
-                " SET name = ?, description = ?, dateOfBirth = ?, sex = ?, ownerId = ?" +
+                " SET name = ?, description = ?, dateOfBirth = ?, sex = ?, ownerId = ?, fatherId = ?, motherId = ?" +
                 " WHERE id = ?;";
 
         jdbcTemplate.update(connection -> {
@@ -82,7 +77,9 @@ public class HorseJdbcDao implements HorseDao {
             stmt.setString(3, horseDto.dateOfBirth().toString());
             stmt.setString(4, horseDto.sex().toString());
             stmt.setString(5, horseDto.ownerId() == null ? null : horseDto.ownerId().toString());
-            stmt.setString(6, horseId.toString());
+            stmt.setString(6, horseDto.fatherId() == null ? null : horseDto.fatherId().toString());
+            stmt.setString(7, horseDto.motherId() == null ? null : horseDto.motherId().toString());
+            stmt.setString(8, horseId.toString());
             return stmt;
         });
 
@@ -112,9 +109,24 @@ public class HorseJdbcDao implements HorseDao {
         final String sql = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
         int status = jdbcTemplate.update(sql, id.toString());
 
-        if(status!=1){
+        if (status != 1) {
             throw new NotFoundException(String.format("Could not find horse with id %s", id));
         }
+    }
+
+    @Override
+    public List<Horse> searchParent(Date dateOfBirth, Sex parentSex, String searchString) {
+        LOGGER.info("Getting possible " + parentSex + " parents of Horse(" + dateOfBirth + "): " + searchString);
+
+        final String sql = "SELECT * FROM " + TABLE_NAME +
+                " WHERE LOWER(name) LIKE ?"+
+                " AND sex = ?"+
+                " AND dateOfBirth <= ?";
+
+        return jdbcTemplate.query(sql, this::mapRow,
+                "%" + searchString.toLowerCase() + "%",
+                parentSex.toString(),
+                dateOfBirth).subList(0,4);
     }
 
     private Horse mapRow(ResultSet result, int rownum) throws SQLException {
@@ -126,6 +138,8 @@ public class HorseJdbcDao implements HorseDao {
         horse.setDateOfBirth(result.getDate("dateOfBirth"));
         horse.setSex(Sex.valueOf(result.getString("sex")));
         horse.setOwnerId(result.getLong("ownerId"));
+        horse.setFatherId(result.getLong("fatherId"));
+        horse.setMotherId(result.getLong("motherId"));
         return horse;
     }
 }
