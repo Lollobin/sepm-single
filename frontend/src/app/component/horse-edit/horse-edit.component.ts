@@ -4,7 +4,9 @@ import {Horse} from "../../dto/horse";
 import {Location} from "@angular/common";
 import {HorseService} from "../../service/horse.service";
 import {FormBuilder, Validators} from "@angular/forms";
-import {Observable} from "rxjs";
+import {debounceTime, distinctUntilChanged, Observable, of, switchMap} from "rxjs";
+import {catchError} from "rxjs/operators";
+import {HorseParents} from "../../dto/horseParents";
 
 @Component({
   selector: 'app-horse-edit',
@@ -14,8 +16,26 @@ import {Observable} from "rxjs";
 export class HorseEditComponent implements OnInit {
   sub;
   id;
-  horse: Observable<Horse>;
+  horse: Observable<HorseParents>;
   horseForm;
+
+  formatter = (result: Horse) => result.name;
+
+  searchFather = (searchText: Observable<string>) => searchText.pipe(
+    debounceTime(250),
+    distinctUntilChanged(),
+    switchMap((text) => this.horseService.searchParent(
+      this.horseForm.valid ? this.horseForm.value.dateOfBirth : undefined,
+      'male',
+      text))).pipe(catchError(() => of([])));
+
+  searchMother = (searchText: Observable<string>) => searchText.pipe(
+    debounceTime(250),
+    distinctUntilChanged(),
+    switchMap((text) => this.horseService.searchParent(
+      this.horseForm.valid ? this.horseForm.value.dateOfBirth : undefined,
+      'female',
+      text))).pipe(catchError(() => of([])));
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -24,7 +44,6 @@ export class HorseEditComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
   }
-
 
   ngOnInit(): void {
     this.sub = this.activatedRoute.paramMap.subscribe(params => {
@@ -37,13 +56,26 @@ export class HorseEditComponent implements OnInit {
         name: [horse.name, Validators.required],
         description: horse.description,
         dateOfBirth: horse.dateOfBirth,
-        sex: horse.sex
+        sex: horse.sex,
+        father: horse.father,
+        mother: horse.mother
       })
     })
   }
 
   onSubmit(): void {
-    this.horseService.edit(this.id, this.horseForm.value).subscribe({next: (horse) => console.log(horse)})
+    const value = this.horseForm.value;
+
+    let horse: Horse = {
+      name: value.name,
+      description: value.description,
+      dateOfBirth: value.dateOfBirth,
+      sex: value.sex,
+      fatherId: value.father == null ? null : value.father.id,
+      motherId: value.mother == null ? null : value.mother.id
+    }
+
+    this.horseService.edit(this.id, horse).subscribe({next: (horse) => console.log(horse)})
   }
 
   goBack(): void {

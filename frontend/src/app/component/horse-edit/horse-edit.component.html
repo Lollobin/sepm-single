@@ -1,11 +1,11 @@
 <div class="flex-horizontal full-width mt-3">
-  <button class="btn btn-light mr-1" (click)="goBack()">&#8592;</button>
+  <button class="btn btn-dark mr-1" (click)="goBack()">&#8592;</button>
 </div>
 
 
 <h2>Edit horse</h2>
 
-<form [formGroup]="horseForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="horseForm" (ngSubmit)="onSubmit()" *ngIf="horseForm">
 
   <div class="form-group">
     <label for="name">Name:</label><br>
@@ -41,6 +41,26 @@
 
   <div class="form-group">
     <p>[Placeholder for Owner]</p>
+  </div>
+
+  <div class="form-group">
+    <label for="typeahead-father">Father:</label>
+    <input id="typeahead-father" type="text" class="form-control"
+           formControlName="father"
+           [ngbTypeahead]="searchFather"
+           [resultFormatter]="formatter"
+           [inputFormatter]="formatter"
+           [editable]='false'>
+  </div>
+
+  <div class="form-group">
+    <label for="typeahead-mother">Mother:</label>
+    <input id="typeahead-mother" type="text" class="form-control"
+           formControlName="mother"
+           [ngbTypeahead]="searchMother"
+           [resultFormatter]="formatter"
+           [inputFormatter]="formatter"
+           [editable]='false'>
   </div>
 
 

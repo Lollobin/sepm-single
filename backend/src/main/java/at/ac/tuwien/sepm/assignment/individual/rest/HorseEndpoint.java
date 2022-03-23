@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.individual.rest;
 
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoParents;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
@@ -47,10 +48,10 @@ public class HorseEndpoint {
     }
 
     @GetMapping(value = "/{id}")
-    public HorseDto getOneById(@PathVariable("id") Long id) {
+    public HorseDtoParents getOneById(@PathVariable("id") Long id) {
         LOGGER.info("GET " + BASE_URL + "/{}", id);
         try {
-            return mapper.entityToDto(service.getOneById(id));
+            return service.getOneById(id);
         } catch (NotFoundException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error during reading horse", e);

@@ -105,6 +105,7 @@ public class HorseJdbcDao implements HorseDao {
     @Override
     public void delete(Long id) {
         LOGGER.info("Delete horse with id {}", id);
+        //todo set entries in fatherId or motherId equal to id to null
 
         final String sql = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
         int status = jdbcTemplate.update(sql, id.toString());
@@ -134,13 +135,17 @@ public class HorseJdbcDao implements HorseDao {
         LOGGER.trace("Mapping row {} onto horse", rownum);
         Horse horse = new Horse();
         horse.setId(result.getLong("id"));
+        if(result.wasNull()) horse.setId(null);
         horse.setName(result.getString("name"));
         horse.setDescription(result.getString("description"));
         horse.setDateOfBirth(result.getDate("dateOfBirth"));
         horse.setSex(Sex.valueOf(result.getString("sex")));
         horse.setOwnerId(result.getLong("ownerId"));
+        if(result.wasNull()) horse.setOwnerId(null);
         horse.setFatherId(result.getLong("fatherId"));
+        if(result.wasNull()) horse.setFatherId(null);
         horse.setMotherId(result.getLong("motherId"));
+        if(result.wasNull()) horse.setMotherId(null);
         return horse;
     }
 }

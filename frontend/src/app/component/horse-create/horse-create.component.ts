@@ -18,11 +18,11 @@ export class HorseCreateComponent implements OnInit {
     name: ['', Validators.required],
     description: '',
     dateOfBirth: ['', Validators.required],
-    sex: ['male',Validators.required],
+    sex: ['male', Validators.required],
     father: '',
     mother: ''
   })
-  formatter = (result:Horse)=> result.name;
+  formatter = (result: Horse) => result.name;
 
   searchFather = (searchText: Observable<string>) => searchText.pipe(
     debounceTime(250),
@@ -62,7 +62,8 @@ export class HorseCreateComponent implements OnInit {
       description: value.description,
       dateOfBirth: value.dateOfBirth,
       sex: value.sex,
-      fatherId: value.father.id
+      fatherId: value.father == null ? null : value.father.id,
+      motherId: value.mother == null ? null : value.mother.id
     }
 
     this.horseService.create(horse)

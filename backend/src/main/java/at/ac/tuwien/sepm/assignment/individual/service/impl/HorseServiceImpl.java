@@ -1,8 +1,10 @@
 package at.ac.tuwien.sepm.assignment.individual.service.impl;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoParents;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
+import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
 import at.ac.tuwien.sepm.assignment.individual.persistence.HorseDao;
 import at.ac.tuwien.sepm.assignment.individual.service.HorseService;
 import at.ac.tuwien.sepm.assignment.individual.validator.HorseValidator;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class HorseServiceImpl implements HorseService {
@@ -20,10 +21,12 @@ public class HorseServiceImpl implements HorseService {
     private static final Logger LOGGER = LoggerFactory.getLogger(HorseServiceImpl.class);
     private final HorseDao dao;
     private final HorseValidator validator;
+    private final HorseMapper mapper;
 
-    public HorseServiceImpl(HorseDao dao) {
+    public HorseServiceImpl(HorseDao dao, HorseMapper mapper) {
         this.dao = dao;
         validator = new HorseValidator(dao);
+        this.mapper = mapper;
     }
 
     @Override
@@ -43,14 +46,27 @@ public class HorseServiceImpl implements HorseService {
     public Horse update(Long horseId, HorseDto horseDto) {
         LOGGER.info("Updating horse with ID {} to match {}", horseId, horseDto);
         validator.validateHorse(horseDto);
-        //todo add check if horse with ID exists
+        //todo check if horse has children, then age and sex cannot always be changed
         return dao.update(horseId, horseDto);
     }
 
     @Override
-    public Horse getOneById(Long id) {
+    public HorseDtoParents getOneById(Long id) {
         LOGGER.info("Get horse with id {}", id);
-        return dao.getOneById(id);
+        Horse horse = dao.getOneById(id);
+
+        Horse father = null;
+        Horse mother = null;
+
+        if (horse.getFatherId() != null) {
+            father = dao.getOneById(horse.getFatherId());
+        }
+
+        if (horse.getMotherId() != null) {
+            mother = dao.getOneById(horse.getMotherId());
+        }
+
+        return mapper.entityToDtoParents(horse, father, mother);
     }
 
     @Override

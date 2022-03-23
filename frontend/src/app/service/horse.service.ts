@@ -1,10 +1,11 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {debounceTime, distinctUntilChanged, Observable, of, switchMap} from 'rxjs';
 import {environment} from 'src/environments/environment';
 import {Horse} from '../dto/horse';
 import {catchError, map, tap} from 'rxjs/operators';
 import {MessageService} from "./message.service";
+import {HorseParents} from "../dto/horseParents";
 
 const baseUri = environment.backendUrl + '/horses';
 
@@ -36,11 +37,11 @@ export class HorseService {
    *
    * @param id id of horse to be fetched.
    */
-  getOneById(id: BigInteger): Observable<Horse> {
-    return this.http.get<Horse>(baseUri + "/" + id)
+  getOneById(id: bigint): Observable<HorseParents> {
+    return this.http.get<HorseParents>(baseUri + "/" + id)
       .pipe(
         tap(_ => this.log('fetching horse with id ' + id)),
-        catchError(this.handleError<Horse>('getOneById'))
+        catchError(this.handleError<HorseParents>('getOneById'))
       )
   }
 
@@ -80,6 +81,7 @@ export class HorseService {
     return this.http.get<Horse[]>(baseUri, {params: queryParams})
       .pipe(catchError(this.handleError<Horse[]>('getAll', [])));
   }
+
 
   /**
    * todo add doc
