@@ -1,0 +1,23 @@
+<div class="flex-horizontal full-width mt-3">
+  <button class="btn btn-dark me-1" (click)="goBack()">&#8592;</button>
+  <button class="btn btn-dark me-1" routerLink="./delete">Delete</button>
+  <button class="btn btn-dark me-1" routerLink="./edit">Edit</button>
+</div>
+
+<div *ngIf="horse" class="mt-3">
+  <h2>Details: {{horse.name}}</h2>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><b>Description:</b> {{horse.description}}</li>
+    <li class="list-group-item"><b>Date of birth:</b> {{horse.dateOfBirth}}</li>
+    <li class="list-group-item"><b>Sex:</b> {{horse.sex}}</li>
+    <li class="list-group-item"><b>Owner:</b> [Placeholder]</li>
+    <li class="list-group-item" *ngIf="horse.father">
+      <b>Father:</b> {{horse.father.name}}
+      <button class="btn btn-secondary btn-sm" routerLink="/horses/{{horse.father.id}}">Details</button>
+    </li>
+    <li class="list-group-item" *ngIf="horse.mother">
+      <b>Mother:</b> {{horse.mother.name}}
+      <button class="btn btn-secondary btn-sm" routerLink="/horses/{{horse.mother.id}}">Details</button>
+    </li>
+  </ul>
+</div>

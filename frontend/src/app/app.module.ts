@@ -12,6 +12,7 @@ import {HorseCreateComponent} from './component/horse-create/horse-create.compon
 import {MessageComponent} from './component/message/message.component';
 import { HorseEditComponent } from './component/horse-edit/horse-edit.component';
 import { HorseDeleteComponent } from './component/horse-delete/horse-delete.component';
+import { HorseDetailsComponent } from './component/horse-details/horse-details.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { HorseDeleteComponent } from './component/horse-delete/horse-delete.comp
     MessageComponent,
     HorseEditComponent,
     HorseDeleteComponent,
+    HorseDetailsComponent,
   ],
   imports: [
     BrowserModule,
