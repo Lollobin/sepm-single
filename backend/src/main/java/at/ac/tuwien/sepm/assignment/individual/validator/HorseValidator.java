@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Class to validate HorseDto.
  * Checks parameters for errors caused by wrong user input.
@@ -40,6 +42,22 @@ public class HorseValidator {
         validateDateOfBirth(horseDto.dateOfBirth());
         validateOwnerId(horseDto.ownerId());
         validateParents(horseDto.fatherId(), horseDto.motherId(), horseDto.dateOfBirth());
+    }
+
+    public void validateParentUpdate(Long id, HorseDto horseDto) {
+        Horse oldHorse = dao.getOneById(id);
+        List<Horse> children = dao.getAllChildren(id);
+
+        if (children.isEmpty())
+            return;
+
+        if (oldHorse.getSex() != horseDto.sex())
+            throw new ValidationException("Cannot change sex of horse with children");
+
+        if (oldHorse.getDateOfBirth() != horseDto.dateOfBirth())
+            for (Horse child : children)
+                if (oldHorse.getDateOfBirth().after(child.getDateOfBirth()))
+                    throw new ValidationException("Cannot change horse to be younger than its child");
     }
 
     private void validateName(String name) {

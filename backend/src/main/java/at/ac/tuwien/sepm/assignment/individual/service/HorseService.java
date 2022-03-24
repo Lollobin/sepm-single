@@ -61,4 +61,11 @@ public interface HorseService {
      * @return
      */
     List<Horse> searchParent(java.sql.Date dateOfBirth, Sex parentSex, String searchString);
+
+    /**
+     * todo add doc
+     * @param id
+     * @return
+     */
+    List<Horse> getAllChildren(Long id);
 }

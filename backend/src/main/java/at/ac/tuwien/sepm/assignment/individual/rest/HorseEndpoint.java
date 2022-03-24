@@ -58,6 +58,13 @@ public class HorseEndpoint {
         }
     }
 
+    @GetMapping("/{id}/children")
+    public Stream<HorseDto> getAllChildren(@PathVariable("id") Long id){
+        LOGGER.info("GET"+ BASE_URL + "/{}/children",id);
+        return service.getAllChildren(id).stream()
+                .map(mapper::entityToDto);
+    }
+
     /**
      * Store a horse in the database.
      *

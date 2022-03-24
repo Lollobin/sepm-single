@@ -46,6 +46,7 @@ public class HorseServiceImpl implements HorseService {
     public Horse update(Long horseId, HorseDto horseDto) {
         LOGGER.info("Updating horse with ID {} to match {}", horseId, horseDto);
         validator.validateHorse(horseDto);
+        validator.validateParentUpdate(horseId,horseDto);
         //todo check if horse has children, then age and sex cannot always be changed
         return dao.update(horseId, horseDto);
     }
@@ -78,5 +79,10 @@ public class HorseServiceImpl implements HorseService {
     @Override
     public List<Horse> searchParent(Date dateOfBirth, Sex parentSex, String searchString) {
         return dao.searchParent(dateOfBirth, parentSex, searchString);
+    }
+
+    @Override
+    public List<Horse> getAllChildren(Long id) {
+        return dao.getAllChildren(id);
     }
 }

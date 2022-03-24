@@ -137,6 +137,21 @@ public class HorseJdbcDao implements HorseDao {
                 dateOfBirth);
     }
 
+    @Override
+    public List<Horse> getAllChildren(Long id) {
+        LOGGER.info("Getting all children of horse " + id);
+        String sql = "";
+
+        Sex sex = getOneById(id).getSex();
+        if (sex == Sex.male) {
+            sql = SQL_SELECT_ALL + " WHERE fatherId = ?";
+        }
+        if (sex == Sex.female) {
+            sql = SQL_SELECT_ALL + " WHERE motherId = ?";
+        }
+        return jdbcTemplate.query(sql, this::mapRow, id);
+    }
+
     private Horse mapRow(ResultSet result, int rownum) throws SQLException {
         LOGGER.trace("Mapping row {} onto horse", rownum);
         Horse horse = new Horse();
