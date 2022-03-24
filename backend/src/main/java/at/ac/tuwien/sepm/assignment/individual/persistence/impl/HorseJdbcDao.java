@@ -128,7 +128,7 @@ public class HorseJdbcDao implements HorseDao {
         final String sql = "SELECT * FROM " + TABLE_NAME +
                 " WHERE LOWER(name) LIKE ?" +
                 " AND sex = ?" +
-                " AND dateOfBirth <= ?" +
+                " AND dateOfBirth < ?" +
                 "LIMIT 5";
 
         return jdbcTemplate.query(sql, this::mapRow,
