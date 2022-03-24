@@ -1,14 +1,10 @@
-package at.ac.tuwien.sepm.assignment.individual.entity;
+package at.ac.tuwien.sepm.assignment.individual.dto;
 
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 
 import java.sql.Date;
 
-/**
- * Class for horse entities
- * Contains all common properties
- */
-public class Horse {
+public class SearchDto {
     private Long id;
     private String name;
     private String description;

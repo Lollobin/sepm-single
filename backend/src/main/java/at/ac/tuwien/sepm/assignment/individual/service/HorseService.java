@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.individual.service;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoParents;
+import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,4 +69,11 @@ public interface HorseService {
      * @return
      */
     List<Horse> getAllChildren(Long id);
+
+    /**
+     * todo add doc
+     * @param searchDto
+     * @return
+     */
+    List<Horse> searchHorse(SearchDto searchDto);
 }

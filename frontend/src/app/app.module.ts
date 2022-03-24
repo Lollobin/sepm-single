@@ -13,6 +13,7 @@ import {MessageComponent} from './component/message/message.component';
 import { HorseEditComponent } from './component/horse-edit/horse-edit.component';
 import { HorseDeleteComponent } from './component/horse-delete/horse-delete.component';
 import { HorseDetailsComponent } from './component/horse-details/horse-details.component';
+import { HorseSearchComponent } from './component/horse-search/horse-search.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { HorseDetailsComponent } from './component/horse-details/horse-details.c
     HorseEditComponent,
     HorseDeleteComponent,
     HorseDetailsComponent,
+    HorseSearchComponent,
   ],
   imports: [
     BrowserModule,

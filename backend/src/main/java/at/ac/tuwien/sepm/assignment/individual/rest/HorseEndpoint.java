@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.rest;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoParents;
+import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
@@ -47,6 +48,19 @@ public class HorseEndpoint {
                 .map(mapper::entityToDto);
     }
 
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Stream<HorseDto> searchHorse(SearchDto searchDto) {
+        LOGGER.info("GET " + BASE_URL + "/search");
+        LOGGER.info(searchDto.getName());
+
+
+        return service.searchHorse(searchDto).stream()
+                .map(mapper::entityToDto);
+    }
+
+
     @GetMapping(value = "/{id}")
     public HorseDtoParents getOneById(@PathVariable("id") Long id) {
         LOGGER.info("GET " + BASE_URL + "/{}", id);
@@ -59,8 +73,8 @@ public class HorseEndpoint {
     }
 
     @GetMapping("/{id}/children")
-    public Stream<HorseDto> getAllChildren(@PathVariable("id") Long id){
-        LOGGER.info("GET"+ BASE_URL + "/{}/children",id);
+    public Stream<HorseDto> getAllChildren(@PathVariable("id") Long id) {
+        LOGGER.info("GET" + BASE_URL + "/{}/children", id);
         return service.getAllChildren(id).stream()
                 .map(mapper::entityToDto);
     }
@@ -107,6 +121,7 @@ public class HorseEndpoint {
         }
     }
 
+
     /**
      * Delete horse with id.
      *
@@ -131,4 +146,6 @@ public class HorseEndpoint {
         return service.searchParent(dateOfBirth, parentSex, searchString).stream()
                 .map(mapper::entityToDto);
     }
+
+
 }

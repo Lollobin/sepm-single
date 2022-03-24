@@ -5,11 +5,13 @@ import { HorseCreateComponent} from "./component/horse-create/horse-create.compo
 import {HorseEditComponent} from "./component/horse-edit/horse-edit.component";
 import {HorseDeleteComponent} from "./component/horse-delete/horse-delete.component";
 import {HorseDetailsComponent} from "./component/horse-details/horse-details.component";
+import {HorseSearchComponent} from "./component/horse-search/horse-search.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'horses', pathMatch: 'full'},
   {path: 'horses', component: HorseComponent},
   {path: 'horses/create', component: HorseCreateComponent},
+  {path: 'horses/search', component: HorseSearchComponent},
   {path: 'horses/:id', component: HorseDetailsComponent},
   {path: 'horses/:id/edit',component: HorseEditComponent},
   {path: 'horses/:id/delete', component: HorseDeleteComponent},

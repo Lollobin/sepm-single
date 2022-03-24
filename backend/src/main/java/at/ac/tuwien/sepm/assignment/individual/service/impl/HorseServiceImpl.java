@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.individual.service.impl;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoParents;
+import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
@@ -84,5 +85,10 @@ public class HorseServiceImpl implements HorseService {
     @Override
     public List<Horse> getAllChildren(Long id) {
         return dao.getAllChildren(id);
+    }
+
+    @Override
+    public List<Horse> searchHorse(SearchDto searchDto) {
+        return dao.searchHorse(searchDto);
     }
 }

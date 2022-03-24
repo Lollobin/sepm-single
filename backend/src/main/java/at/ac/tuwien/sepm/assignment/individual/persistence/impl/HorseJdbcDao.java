@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.persistence.impl;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -150,6 +152,54 @@ public class HorseJdbcDao implements HorseDao {
             sql = SQL_SELECT_ALL + " WHERE motherId = ?";
         }
         return jdbcTemplate.query(sql, this::mapRow, id);
+    }
+
+    @Override
+    public List<Horse> searchHorse(SearchDto searchDto) {
+        LOGGER.info("Getting possible horses for requested criteria");
+
+        String sql = SQL_SELECT_ALL;
+        List<Object> parameters = new ArrayList<>();
+
+        boolean firstParameter = true;
+
+        if (searchDto.getName() != null && !searchDto.getName().equals("")) {
+            if (firstParameter) {
+                sql += " WHERE";
+                firstParameter=false;
+            }
+            sql += " WHERE LOWER(name) LIKE ?";
+            parameters.add("%" + searchDto.getName() + "%");
+        }
+        if (searchDto.getDescription() != null && !searchDto.getDescription().equals("")) {
+            sql += " AND LOWER(description) LIKE ?";
+            parameters.add("%" + searchDto.getDescription() + "%");
+        }
+        if (searchDto.getDateOfBirth() != null) {
+            sql += " AND dateOfBirth = ?";
+            parameters.add(searchDto.getDateOfBirth());
+        }
+        if (searchDto.getSex() != null) {
+            sql += " AND sex = ?";
+            parameters.add(searchDto.getSex().toString());
+        }
+        if (searchDto.getOwnerId() != null) {
+            sql += " AND ownerId = ?";
+            parameters.add(searchDto.getOwnerId().toString());
+        }
+        if (searchDto.getFatherId() != null) {
+            sql += " AND fatherId = ?";
+            parameters.add(searchDto.getFatherId().toString());
+        }
+        if (searchDto.getMotherId() != null) {
+            sql += " AND motherId = ?";
+            parameters.add(searchDto.getMotherId().toString());
+        }
+
+        LOGGER.info(parameters.toString());
+
+        return jdbcTemplate.query(sql, this::mapRow, parameters.toArray());
+
     }
 
     private Horse mapRow(ResultSet result, int rownum) throws SQLException {

@@ -79,7 +79,29 @@ export class HorseService {
       .append("searchString", searchString);
 
     return this.http.get<Horse[]>(baseUri, {params: queryParams})
-      .pipe(catchError(this.handleError<Horse[]>('getAll', [])));
+      .pipe(catchError(this.handleError<Horse[]>('searchParent', [])));
+  }
+
+  searchHorse(searchDto: Horse): Observable<Horse[]> {
+    this.log("searching for "+searchDto.name)
+
+    let queryParams = new HttpParams();
+    if (searchDto.name != null)
+      queryParams = queryParams.append('name', searchDto.name);
+    if (searchDto.description != null)
+      queryParams = queryParams.append('description', searchDto.description);
+    if (searchDto.dateOfBirth != null)
+      queryParams = queryParams.append('dateOfBirth', searchDto.dateOfBirth.toString());
+    if (searchDto.sex != null)
+      queryParams = queryParams.append('sex', searchDto.sex);
+    if (searchDto.fatherId != null)
+      queryParams = queryParams.append('fatherId', searchDto.fatherId.toString());
+    if (searchDto.motherId != null)
+      queryParams = queryParams.append('motherId', searchDto.motherId.toString());
+    this.log("params " + queryParams.toString())
+
+    return this.http.get<Horse[]>(baseUri + "/search", {params: queryParams})
+      .pipe(catchError(this.handleError<Horse[]>('searchHorse', [])));
   }
 
 
@@ -92,6 +114,7 @@ export class HorseService {
     return this.http.delete<void>(baseUri + "/" + id)
       .pipe(catchError(this.handleError<void>('delete')));
   }
+
 
   /**
    * Handle Http operation that failed.
