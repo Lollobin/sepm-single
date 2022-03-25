@@ -8,11 +8,17 @@
   <table class="table table-hover">
     <thead>
     <th>Name</th>
-    <th>Functions</th>
+    <th>Description</th>
+    <th>Date of birth</th>
+    <th>Sex</th>
+    <th></th>
     </thead>
     <tbody>
     <tr *ngFor="let horse of horses">
       <td>{{horse.name}}</td>
+      <td>{{horse.description}}</td>
+      <td>{{horse.dateOfBirth}}</td>
+      <td>{{horse.sex}}</td>
       <td>
         <button class="btn btn-dark me-1" id="{{'details'+horse.id}}" [routerLink]="['/horses', horse.id]">
           Details

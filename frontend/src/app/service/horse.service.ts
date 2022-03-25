@@ -85,8 +85,6 @@ export class HorseService {
   }
 
   searchHorse(name: string, description: string, dateOfBirth: Date, sex: string): Observable<Horse[]> {
-    this.log(name.toString())
-
     let queryParams = new HttpParams();
     if (name != null && name != '')
       queryParams = queryParams.append('name', name);
@@ -101,7 +99,6 @@ export class HorseService {
     return this.http.get<Horse[]>(baseUri + "/search", {params: queryParams})
       .pipe(catchError(this.handleError<Horse[]>('searchHorse', [])));
   }
-
 
   /**
    * todo add doc
