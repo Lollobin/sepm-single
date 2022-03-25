@@ -73,6 +73,8 @@ export class HorseService {
    * @param searchString
    */
   searchParent(dateOfBirth: Date, parentSex: string, searchString: string): Observable<Horse[]> {
+    this.log("searchString: "+ searchString)
+
     let queryParams = new HttpParams()
       .append("dateOfBirth", dateOfBirth.toString())
       .append("parentSex", parentSex)
@@ -82,22 +84,18 @@ export class HorseService {
       .pipe(catchError(this.handleError<Horse[]>('searchParent', [])));
   }
 
-  searchHorse(searchDto: Horse): Observable<Horse[]> {
-    this.log("searching for "+searchDto.name)
+  searchHorse(name: string, description: string, dateOfBirth: Date, sex: string): Observable<Horse[]> {
+    this.log(name.toString())
 
     let queryParams = new HttpParams();
-    if (searchDto.name != null)
-      queryParams = queryParams.append('name', searchDto.name);
-    if (searchDto.description != null)
-      queryParams = queryParams.append('description', searchDto.description);
-    if (searchDto.dateOfBirth != null)
-      queryParams = queryParams.append('dateOfBirth', searchDto.dateOfBirth.toString());
-    if (searchDto.sex != null)
-      queryParams = queryParams.append('sex', searchDto.sex);
-    if (searchDto.fatherId != null)
-      queryParams = queryParams.append('fatherId', searchDto.fatherId.toString());
-    if (searchDto.motherId != null)
-      queryParams = queryParams.append('motherId', searchDto.motherId.toString());
+    if (name != null && name != '')
+      queryParams = queryParams.append('name', name);
+    if (description != null && description != '')
+      queryParams = queryParams.append('description', description);
+    if (dateOfBirth != null)
+      queryParams = queryParams.append('dateOfBirth', dateOfBirth.toString());
+    if (sex != null)
+      queryParams = queryParams.append('sex', sex);
     this.log("params " + queryParams.toString())
 
     return this.http.get<Horse[]>(baseUri + "/search", {params: queryParams})

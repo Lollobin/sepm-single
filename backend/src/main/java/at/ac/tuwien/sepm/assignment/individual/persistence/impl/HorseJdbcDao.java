@@ -158,48 +158,27 @@ public class HorseJdbcDao implements HorseDao {
     public List<Horse> searchHorse(SearchDto searchDto) {
         LOGGER.info("Getting possible horses for requested criteria");
 
-        String sql = SQL_SELECT_ALL;
-        List<Object> parameters = new ArrayList<>();
+        Object[] parameters = new Object[]{
+                searchDto.getName() == null ? null : "%" + searchDto.getName().toLowerCase() + "%",
+                searchDto.getName() == null ? null : "%" + searchDto.getName().toLowerCase() + "%",
+                searchDto.getDescription() == null ? null : "%" + searchDto.getDescription().toLowerCase() + "%",
+                searchDto.getDescription() == null ? null : "%" + searchDto.getDescription().toLowerCase() + "%",
+                searchDto.getDateOfBirth(),
+                searchDto.getDateOfBirth(),
+                searchDto.getSex() == null ? null : searchDto.getSex().toString(),
+                searchDto.getSex() == null ? null : searchDto.getSex().toString(),
+                searchDto.getOwnerId() == null ? null : searchDto.getOwnerId().toString(),
+                searchDto.getOwnerId() == null ? null : searchDto.getOwnerId().toString()
+        };
 
-        boolean firstParameter = true;
+        final String sql = SQL_SELECT_ALL
+                + " WHERE (? IS NULL OR LOWER(name) LIKE ?)"
+                + " AND (? IS NULL OR LOWER(name) LIKE ?)"
+                + " AND (? IS NULL OR dateOfBirth = ?)"
+                + " AND (? IS NULL OR sex = ?)"
+                + " AND (? IS NULL OR ownerId = ?)";
 
-        if (searchDto.getName() != null && !searchDto.getName().equals("")) {
-            if (firstParameter) {
-                sql += " WHERE";
-                firstParameter=false;
-            }
-            sql += " WHERE LOWER(name) LIKE ?";
-            parameters.add("%" + searchDto.getName() + "%");
-        }
-        if (searchDto.getDescription() != null && !searchDto.getDescription().equals("")) {
-            sql += " AND LOWER(description) LIKE ?";
-            parameters.add("%" + searchDto.getDescription() + "%");
-        }
-        if (searchDto.getDateOfBirth() != null) {
-            sql += " AND dateOfBirth = ?";
-            parameters.add(searchDto.getDateOfBirth());
-        }
-        if (searchDto.getSex() != null) {
-            sql += " AND sex = ?";
-            parameters.add(searchDto.getSex().toString());
-        }
-        if (searchDto.getOwnerId() != null) {
-            sql += " AND ownerId = ?";
-            parameters.add(searchDto.getOwnerId().toString());
-        }
-        if (searchDto.getFatherId() != null) {
-            sql += " AND fatherId = ?";
-            parameters.add(searchDto.getFatherId().toString());
-        }
-        if (searchDto.getMotherId() != null) {
-            sql += " AND motherId = ?";
-            parameters.add(searchDto.getMotherId().toString());
-        }
-
-        LOGGER.info(parameters.toString());
-
-        return jdbcTemplate.query(sql, this::mapRow, parameters.toArray());
-
+        return jdbcTemplate.query(sql, this::mapRow, parameters);
     }
 
     private Horse mapRow(ResultSet result, int rownum) throws SQLException {

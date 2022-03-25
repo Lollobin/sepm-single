@@ -3,6 +3,8 @@ import {HorseService} from "../../service/horse.service";
 import {Location} from "@angular/common";
 import {FormBuilder, Validators} from "@angular/forms";
 import {Horse} from "../../dto/horse";
+import {debounceTime, distinctUntilChanged, Observable, of, switchMap} from "rxjs";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-horse-search',
@@ -16,12 +18,25 @@ export class HorseSearchComponent implements OnInit {
     name: null,
     description: null,
     dateOfBirth: null,
-    sex: 'unspecified',
+    sex: null,
     father: null,
     mother: null
   })
 
   nameFormatter = (result: Horse) => result.name;
+
+  searchName = (searchText: Observable<string>) => searchText.pipe(
+    debounceTime(250),
+    distinctUntilChanged(),
+    switchMap((text) => this.horseService.searchHorse(
+      text,
+      this.horseForm.value.description,
+      this.horseForm.value.dateOfBirth,
+      this.horseForm.value.sex
+    ))).pipe(catchError(() => of([])));
+
+
+
   descriptionFormatter = (result: Horse) => result.description;
 
   constructor(
@@ -40,20 +55,20 @@ export class HorseSearchComponent implements OnInit {
 
   onSubmit(): void {
     const value = this.horseForm.value;
-    let searchDto: Horse = {
-      name: value.name == '' ? null : value.name,
-      description: value.description == '' ? null : value.description,
-      dateOfBirth: value.dateOfBirth,
-      sex: value.sex == 'unspecified' ? null : value.sex,
-      fatherId: value.father == null ? null : value.father.id,
-      motherId: value.mother == null ? null : value.mother.id
+     let horse: Horse={
+       name: value.name,
+         description: value.description,
+       dateOfBirth: value.dateOfBirth,
+       sex: value.sex
     }
 
-    this.horseService.searchHorse(searchDto).subscribe({
-      next: data => {
-        this.results = data;
-      }
-    })
+
+    this.horseService.searchHorse(horse.name, value.description, value.dateOfBirth, value.sex)
+      .subscribe({
+        next: data => {
+          this.results = data;
+        }
+      })
 
   }
 }
