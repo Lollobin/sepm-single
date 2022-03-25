@@ -1,0 +1,22 @@
+<div class="flex-horizontal full-width mt-3">
+  <button class="btn btn-dark me-1" (click)="reloadOwners()">&#x21bb;</button>
+  <button class="btn btn-dark me-1" routerLink="/owners/create">&plus;</button>
+</div>
+
+<div *ngIf="owners" class="mt-3">
+  <table class="table table-hover align-middle">
+    <thead>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>E-Mail Address</th>
+    </thead>
+    <tbody>
+    <tr *ngFor = "let owner of owners">
+      <td>{{owner.firstName}}</td>
+      <td>{{owner.lastName}}</td>
+      <td>{{owner.email}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
