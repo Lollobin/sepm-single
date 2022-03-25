@@ -73,6 +73,9 @@ public class Validator {
     private void validateName(String name) {
         LOGGER.trace("Validating name '{}'", name);
 
+        if(name==null)
+            throw new ValidationException("Name cannot be null");
+
         if (name.trim().length() == 0)
             throw new ValidationException("Name cannot be empty or only spaces");
     }

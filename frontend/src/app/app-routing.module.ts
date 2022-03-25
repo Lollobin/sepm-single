@@ -6,6 +6,8 @@ import {HorseEditComponent} from "./component/horse-edit/horse-edit.component";
 import {HorseDeleteComponent} from "./component/horse-delete/horse-delete.component";
 import {HorseDetailsComponent} from "./component/horse-details/horse-details.component";
 import {HorseSearchComponent} from "./component/horse-search/horse-search.component";
+import {OwnerComponent} from "./component/owner/owner.component";
+import {OwnerCreateComponent} from "./component/owner-create/owner-create.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'horses', pathMatch: 'full'},
@@ -15,6 +17,8 @@ const routes: Routes = [
   {path: 'horses/:id', component: HorseDetailsComponent},
   {path: 'horses/:id/edit',component: HorseEditComponent},
   {path: 'horses/:id/delete', component: HorseDeleteComponent},
+  {path: 'owners',component:OwnerComponent},
+  {path: 'owners/create',component:OwnerCreateComponent},
   {path: '**', redirectTo: 'horses'},
 ];
 

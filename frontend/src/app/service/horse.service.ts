@@ -133,6 +133,7 @@ export class HorseService {
   }
 
   log(message: string) {
+    console.log(message)
     this.messageService.add(`${message}`);
   }
 }

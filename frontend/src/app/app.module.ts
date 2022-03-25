@@ -14,6 +14,8 @@ import { HorseEditComponent } from './component/horse-edit/horse-edit.component'
 import { HorseDeleteComponent } from './component/horse-delete/horse-delete.component';
 import { HorseDetailsComponent } from './component/horse-details/horse-details.component';
 import { HorseSearchComponent } from './component/horse-search/horse-search.component';
+import { OwnerComponent } from './component/owner/owner.component';
+import { OwnerCreateComponent } from './component/owner-create/owner-create.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { HorseSearchComponent } from './component/horse-search/horse-search.comp
     HorseDeleteComponent,
     HorseDetailsComponent,
     HorseSearchComponent,
+    OwnerComponent,
+    OwnerCreateComponent,
   ],
   imports: [
     BrowserModule,
