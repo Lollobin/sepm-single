@@ -9,3 +9,11 @@ CREATE TABLE IF NOT EXISTS horse
     fatherId    BIGINT NULL,
     motherId    BIGINT NULL
 );
+
+CREATE TABLE IF NOT EXISTS owner
+(
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    firstName   VARCHAR(255) NOT NULL,
+    lastName    VARCHAR(255) NOT NULL,
+    email       VARCHAR(255) NULL
+);

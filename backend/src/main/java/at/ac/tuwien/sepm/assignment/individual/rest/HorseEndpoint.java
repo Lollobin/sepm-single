@@ -2,10 +2,8 @@ package at.ac.tuwien.sepm.assignment.individual.rest;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoParents;
 import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
-import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
-import at.ac.tuwien.sepm.assignment.individual.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
 import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
@@ -121,7 +119,6 @@ public class HorseEndpoint {
         }
     }
 
-
     /**
      * Delete horse with id.
      *
@@ -146,6 +143,5 @@ public class HorseEndpoint {
         return service.searchParent(dateOfBirth, parentSex, searchString).stream()
                 .map(mapper::entityToDto);
     }
-
 
 }

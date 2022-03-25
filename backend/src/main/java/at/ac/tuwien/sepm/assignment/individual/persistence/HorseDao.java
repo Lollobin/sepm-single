@@ -37,17 +37,17 @@ public interface HorseDao {
   Horse update(Long horseId, HorseDto horseDto);
 
     /**
-     * Get horse with the given id in the persistent data store.
+     * Get horse with the given id from the persistent data store.
      *
-     * @param id ID oh horse to return
+     * @param id id of the horse to return
      * @return horse with the given id
      */
   Horse getOneById(Long id);
 
     /**
-     * Delete horse wit id from the persistent data store.
+     * Delete horse with id from the persistent data store.
      *
-     * @param id id of horse to be deleted.
+     * @param id id of horse to be deleted
      */
   void delete(Long id);
 
@@ -69,7 +69,7 @@ public interface HorseDao {
 
     /**
      * todo add doc
-     * @param horse
+     * @param searchDto
      * @return
      */
   List<Horse> searchHorse(SearchDto searchDto);

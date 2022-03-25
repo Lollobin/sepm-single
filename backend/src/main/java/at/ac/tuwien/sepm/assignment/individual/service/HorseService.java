@@ -5,7 +5,6 @@ import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoParents;
 import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 

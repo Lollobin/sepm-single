@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.validator;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Class to validate HorseDto.
@@ -19,12 +21,12 @@ import java.util.List;
  * Throws ValidationException if error is detected.
  */
 @Component
-public class HorseValidator {
+public class Validator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HorseValidator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Validator.class);
     private final HorseDao dao;
 
-    public HorseValidator(HorseDao dao) {
+    public Validator(HorseDao dao) {
         this.dao = dao;
     }
 
@@ -42,6 +44,14 @@ public class HorseValidator {
         validateDateOfBirth(horseDto.dateOfBirth());
         validateOwnerId(horseDto.ownerId());
         validateParents(horseDto.fatherId(), horseDto.motherId(), horseDto.dateOfBirth());
+    }
+
+    public void validateOwner(OwnerDto ownerDto) {
+        LOGGER.trace("Validating owner {}", ownerDto);
+        validateName(ownerDto.firstName());
+        validateName(ownerDto.lastName());
+        validateEmail(ownerDto.email());
+
     }
 
     public void validateParentUpdate(Long id, HorseDto horseDto) {
@@ -76,6 +86,12 @@ public class HorseValidator {
 
         if (dateOfBirth.after(new java.sql.Date(System.currentTimeMillis())))
             throw new ValidationException("Date of birth cannot be in the future");
+    }
+
+    private void validateEmail(String email) {
+        String regexPattern = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        if (!Pattern.compile(regexPattern).matcher(email).matches())
+            throw new ValidationException("Email is not a valid adress");
     }
 
     private void validateOwnerId(Long ownerId) {

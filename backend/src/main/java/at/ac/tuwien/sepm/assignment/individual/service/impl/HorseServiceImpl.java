@@ -8,7 +8,7 @@ import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
 import at.ac.tuwien.sepm.assignment.individual.persistence.HorseDao;
 import at.ac.tuwien.sepm.assignment.individual.service.HorseService;
-import at.ac.tuwien.sepm.assignment.individual.validator.HorseValidator;
+import at.ac.tuwien.sepm.assignment.individual.validator.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,75 +20,75 @@ import java.util.List;
 public class HorseServiceImpl implements HorseService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HorseServiceImpl.class);
-    private final HorseDao dao;
-    private final HorseValidator validator;
-    private final HorseMapper mapper;
+    private final HorseDao horseDao;
+    private final Validator validator;
+    private final HorseMapper horseMapper;
 
-    public HorseServiceImpl(HorseDao dao, HorseMapper mapper) {
-        this.dao = dao;
-        validator = new HorseValidator(dao);
-        this.mapper = mapper;
+    public HorseServiceImpl(HorseDao horseDao, Validator validator, HorseMapper horseMapper) {
+        this.horseDao = horseDao;
+        this.validator = validator;
+        this.horseMapper = horseMapper;
     }
 
     @Override
     public List<Horse> allHorses() {
         LOGGER.info("Getting all horses");
-        return dao.getAll();
+        return horseDao.getAll();
     }
 
     @Override
     public Horse save(HorseDto horseDto) {
         LOGGER.info("Saving {}", horseDto.toString());
         validator.validateHorse(horseDto);
-        return dao.save(horseDto);
+        return horseDao.save(horseDto);
     }
 
     @Override
     public Horse update(Long horseId, HorseDto horseDto) {
         LOGGER.info("Updating horse with ID {} to match {}", horseId, horseDto);
         validator.validateHorse(horseDto);
-        validator.validateParentUpdate(horseId,horseDto);
+        validator.validateParentUpdate(horseId, horseDto);
         //todo check if horse has children, then age and sex cannot always be changed
-        return dao.update(horseId, horseDto);
+        return horseDao.update(horseId, horseDto);
     }
 
     @Override
     public HorseDtoParents getOneById(Long id) {
         LOGGER.info("Get horse with id {}", id);
-        Horse horse = dao.getOneById(id);
+        Horse horse = horseDao.getOneById(id);
 
         Horse father = null;
         Horse mother = null;
 
         if (horse.getFatherId() != null) {
-            father = dao.getOneById(horse.getFatherId());
+            father = horseDao.getOneById(horse.getFatherId());
         }
 
         if (horse.getMotherId() != null) {
-            mother = dao.getOneById(horse.getMotherId());
+            mother = horseDao.getOneById(horse.getMotherId());
         }
 
-        return mapper.entityToDtoParents(horse, father, mother);
+        return horseMapper.entityToDtoParents(horse, father, mother);
     }
 
     @Override
     public void delete(Long id) {
         LOGGER.info("Delete horse with id {}", id);
-        dao.delete(id);
+        horseDao.delete(id);
     }
 
     @Override
     public List<Horse> searchParent(Date dateOfBirth, Sex parentSex, String searchString) {
-        return dao.searchParent(dateOfBirth, parentSex, searchString);
+        return horseDao.searchParent(dateOfBirth, parentSex, searchString);
     }
 
     @Override
     public List<Horse> getAllChildren(Long id) {
-        return dao.getAllChildren(id);
+        return horseDao.getAllChildren(id);
     }
 
     @Override
     public List<Horse> searchHorse(SearchDto searchDto) {
-        return dao.searchHorse(searchDto);
+        return horseDao.searchHorse(searchDto);
     }
 }

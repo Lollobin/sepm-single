@@ -181,11 +181,10 @@ public class HorseJdbcDao implements HorseDao {
         return jdbcTemplate.query(sql, this::mapRow, parameters);
     }
 
-    private Horse mapRow(ResultSet result, int rownum) throws SQLException {
-        LOGGER.trace("Mapping row {} onto horse", rownum);
+    private Horse mapRow(ResultSet result, int rowNum) throws SQLException {
+        LOGGER.trace("Mapping row {} onto horse", rowNum);
         Horse horse = new Horse();
         horse.setId(result.getLong("id"));
-        if (result.wasNull()) horse.setId(null);
         horse.setName(result.getString("name"));
         horse.setDescription(result.getString("description"));
         horse.setDateOfBirth(result.getDate("dateOfBirth"));
