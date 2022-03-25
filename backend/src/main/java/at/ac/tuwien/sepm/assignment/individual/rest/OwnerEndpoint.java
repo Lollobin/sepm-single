@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.individual.rest;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.OwnerSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
 import at.ac.tuwien.sepm.assignment.individual.mapper.OwnerMapper;
 import at.ac.tuwien.sepm.assignment.individual.service.OwnerService;
@@ -57,5 +58,12 @@ public class OwnerEndpoint {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Parameters are not valid", e);
         }
+    }
+
+    @GetMapping(params = {"name"})
+    @ResponseStatus(HttpStatus.OK)
+    public Stream<OwnerDto>searchOwner(OwnerSearchDto ownerSearchDto){
+        return ownerService.searchOwner(ownerSearchDto).stream()
+                .map(ownerMapper::entityToDto);
     }
 }

@@ -4,6 +4,7 @@ export interface Horse {
   description?: string;
   dateOfBirth: Date;
   sex: Sex;
+  ownerId?: bigint;
   fatherId?: bigint;
   motherId?: bigint;
 }

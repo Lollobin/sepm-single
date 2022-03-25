@@ -1,8 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.persistence;
 
-import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
-import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
+import at.ac.tuwien.sepm.assignment.individual.dto.OwnerSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
 
 import java.util.List;
@@ -26,6 +25,15 @@ public interface OwnerDao {
      * @return corresponding entity with generated ID
      */
     Owner save(OwnerDto ownerDto);
+
+    /**
+     * Returns all possible owners.
+     * Matches the string to owner name.
+     *
+     * @param ownerSearchDto string to match to owner name
+     * @return possible owner matches
+     */
+    List<Owner> searchOwner(OwnerSearchDto ownerSearchDto);
 
     /**
      * Get an owner with the given id from the persistent data store.

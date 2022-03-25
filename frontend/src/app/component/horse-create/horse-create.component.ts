@@ -6,6 +6,8 @@ import {HorseService} from "../../service/horse.service";
 import {Horse} from "../../dto/horse";
 import {debounceTime, distinctUntilChanged, Observable, of, switchMap} from "rxjs";
 import {catchError} from "rxjs/operators";
+import {Owner} from "../../dto/owner";
+import {OwnerService} from "../../service/owner.service";
 
 @Component({
   selector: 'app-horse-create',
@@ -19,10 +21,20 @@ export class HorseCreateComponent implements OnInit {
     description: '',
     dateOfBirth: ['', Validators.required],
     sex: ['male', Validators.required],
-    father: '',
-    mother: ''
+    owner: null,
+    father: null,
+    mother: null
   })
+
+  ownerFormatter = (result: Owner) => result.firstName + " " + result.lastName;
   formatter = (result: Horse) => result.name;
+
+  searchOwner = (searchText: Observable<string>) => searchText.pipe(
+    debounceTime(250),
+    distinctUntilChanged(),
+    switchMap((text) => this.ownerService.searchOwner(text)))
+    .pipe(catchError(() => of([]))
+    )
 
   searchFather = (searchText: Observable<string>) => searchText.pipe(
     debounceTime(250),
@@ -43,6 +55,7 @@ export class HorseCreateComponent implements OnInit {
   constructor(
     private location: Location,
     private horseService: HorseService,
+    private ownerService: OwnerService,
     private formBuilder: FormBuilder
   ) {
   }
@@ -62,9 +75,10 @@ export class HorseCreateComponent implements OnInit {
       description: value.description,
       dateOfBirth: value.dateOfBirth,
       sex: value.sex,
+      ownerId: value.owner ? value.owner.id : null,
       fatherId: value.father == null ? null : value.father.id,
       motherId: value.mother == null ? null : value.mother.id
-    }
+    };
 
     this.horseService.create(horse)
       .subscribe({next: (horse) => console.log(horse)})

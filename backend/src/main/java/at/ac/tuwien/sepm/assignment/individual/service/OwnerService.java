@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.service;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.OwnerSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
 
 import java.util.List;
@@ -22,4 +23,13 @@ public interface OwnerService {
      * @return owner entity with generated id
      */
     Owner save(OwnerDto ownerDto);
+
+    /**
+     * Returns all possible owners.
+     * Matches string to first and last name.
+     *
+     * @param ownerSearchDto string to match name to
+     * @return matching owners
+     */
+    List<Owner> searchOwner(OwnerSearchDto ownerSearchDto);
 }

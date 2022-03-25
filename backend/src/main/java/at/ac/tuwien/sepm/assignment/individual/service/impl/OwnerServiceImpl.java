@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.service.impl;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.OwnerSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
 import at.ac.tuwien.sepm.assignment.individual.mapper.OwnerMapper;
 import at.ac.tuwien.sepm.assignment.individual.persistence.OwnerDao;
@@ -38,5 +39,10 @@ public class OwnerServiceImpl implements OwnerService {
         LOGGER.info("Saving {}", ownerDto.toString());
         validator.validateOwner(ownerDto);
         return ownerDao.save(ownerDto);
+    }
+
+    @Override
+    public List<Owner> searchOwner(OwnerSearchDto ownerSearchDto) {
+        return ownerDao.searchOwner(ownerSearchDto);
     }
 }

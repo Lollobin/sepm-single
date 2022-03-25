@@ -38,8 +38,15 @@
     <label class="form-check-label" for="female">female</label>
   </div>
 
+
   <div class="form-group">
-    <p>[Placeholder for Owner]</p>
+    <label for="typeahead-owner">Owner:</label>
+    <input id="typeahead-owner" type="text" class="form-control"
+           formControlName="owner"
+           [ngbTypeahead]="searchOwner"
+           [resultFormatter]="ownerFormatter"
+           [inputFormatter]="ownerFormatter"
+           [editable]='false'>
   </div>
 
   <div class="form-group">

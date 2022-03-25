@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {MessageService} from "./message.service";
 import {Observable, of, tap} from "rxjs";
 import {Owner} from "../dto/owner";
@@ -35,6 +35,20 @@ export class OwnerService {
   create(owner: Owner): Observable<Owner>{
     return this.http.post<Owner>(baseUri,owner)
       .pipe(catchError(this.handleError<Owner>('create')))
+  }
+
+  /**
+   * Gets possible owners.
+   * Matches based on name.
+   *
+   * @param searchString string to match owner names with
+   */
+  searchOwner(searchString: string):Observable<Owner[]>{
+    let queryParams = new HttpParams()
+      .append("name",searchString);
+
+    return this.http.get<Owner[]>(baseUri,{params: queryParams})
+      .pipe(catchError(this.handleError<Owner[]>('searchOwner',[])))
   }
 
 

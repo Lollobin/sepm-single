@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.persistence.impl;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.OwnerSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
 import at.ac.tuwien.sepm.assignment.individual.mapper.OwnerMapper;
 import at.ac.tuwien.sepm.assignment.individual.persistence.OwnerDao;
@@ -59,9 +60,22 @@ public class OwnerJdbcDao implements OwnerDao {
     }
 
     @Override
+    public List<Owner> searchOwner(OwnerSearchDto ownerSearchDto) {
+        LOGGER.info("Getting possible owners matching '{}'", ownerSearchDto.name());
+        final String sql = SQL_SELECT_ALL
+                + " WHERE LOWER(CONCAT(firstName, lastName)) like ?"
+                + " LIMIT 5";
+
+        return jdbcTemplate.query(sql, this::mapRow,
+                "%" + ownerSearchDto.name().toLowerCase() + "%");
+    }
+
+    @Override
     public Owner getOneById(Long id) {
         return null;
     }
+
+
 
     private Owner mapRow(ResultSet result, int rowNum) throws SQLException {
         LOGGER.trace("Mapping row {} onto owner", rowNum);
