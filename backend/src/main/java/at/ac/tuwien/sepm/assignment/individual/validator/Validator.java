@@ -6,7 +6,6 @@ import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
 import at.ac.tuwien.sepm.assignment.individual.persistence.HorseDao;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -54,6 +53,7 @@ public class Validator {
      */
     public void validateOwner(OwnerDto ownerDto) {
         LOGGER.trace("Validating owner {}", ownerDto);
+
         validateName(ownerDto.firstName());
         validateName(ownerDto.lastName());
         validateEmail(ownerDto.email());
@@ -62,10 +62,11 @@ public class Validator {
     /**
      * Validates HorseDto to be updated.
      *
-     * @param id id of horse to be updated
+     * @param id       id of horse to be updated
      * @param horseDto new data for horse
      */
     public void validateHorseUpdate(Long id, HorseDto horseDto) {
+        LOGGER.trace("Validating horse update id: {}, data: {}", id, horseDto);
         validateHorse(horseDto);
         Horse oldHorse = horseDao.getOneById(id);
         List<Horse> children = horseDao.getAllChildren(id);
@@ -83,7 +84,7 @@ public class Validator {
     }
 
     private void validateName(String name) {
-        LOGGER.trace("Validating name '{}'", name);
+        LOGGER.trace("Validating name: {}", name);
 
         if (name == null)
             throw new ValidationException("Name cannot be null");
@@ -93,7 +94,7 @@ public class Validator {
     }
 
     private void validateDateOfBirth(LocalDate dateOfBirth) {
-        LOGGER.trace("Validating dateOfBirth '{}'", dateOfBirth);
+        LOGGER.trace("Validating dateOfBirth: {}", dateOfBirth);
 
         if (dateOfBirth == null)
             throw new ValidationException("Date of birth cannot be null");
@@ -103,6 +104,8 @@ public class Validator {
     }
 
     private void validateEmail(String email) {
+        LOGGER.trace("Validating e-mail: {}", email);
+
         if (email == null || email.equals(""))
             return;
 
@@ -112,13 +115,15 @@ public class Validator {
     }
 
     private void validateOwnerId(Long ownerId) {
+        LOGGER.trace("Validating ownerId: {}", ownerId);
 
-        //LOGGER.trace("Validating ownerId '{}'", ownerId);
         //todo add check if owner exists
 
     }
 
     private void validateParents(Long fatherId, Long motherId, LocalDate dateOfBirth) {
+        LOGGER.trace("Validating parents: fatherId: {}, motherId: {}, dateOfBirth: {}", fatherId, motherId, dateOfBirth);
+
         if (fatherId != null) {
             Horse father = horseDao.getOneById(fatherId);
             if (father.getSex() == Sex.female)

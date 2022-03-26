@@ -27,42 +27,45 @@ public class HorseServiceImpl implements HorseService {
 
     @Override
     public Long save(HorseDto horseDto) {
-        LOGGER.info("Saving {}", horseDto.toString());
+        LOGGER.trace("Saving {}", horseDto);
         validator.validateHorse(horseDto);
         return horseDao.save(horseDto);
     }
 
     @Override
     public Horse update(Long horseId, HorseDto horseDto) {
-        LOGGER.info("Updating horse with ID {} to match {}", horseId, horseDto);
+        LOGGER.trace("Updating horse with ID {} to match {}", horseId, horseDto);
         validator.validateHorseUpdate(horseId, horseDto);
         return horseDao.update(horseId, horseDto);
     }
 
     @Override
     public Horse getOneById(Long id) {
-        LOGGER.info("Get horse with id {}", id);
+        LOGGER.trace("Get horse with id {}", id);
         return horseDao.getOneById(id);
     }
 
     @Override
     public void delete(Long id) {
-        LOGGER.info("Delete horse with id {}", id);
+        LOGGER.trace("Delete horse with id {}", id);
         horseDao.delete(id);
     }
 
     @Override
     public List<Horse> searchParent(ParentSearchDto parentSearchDto) {
+        LOGGER.trace("Search parents: {}", parentSearchDto);
         return horseDao.searchParent(parentSearchDto);
     }
 
     @Override
     public List<Horse> getAllChildren(Long id) {
+        LOGGER.trace("Get all children of horse with id {}", id);
         return horseDao.getAllChildren(id);
     }
 
     @Override
     public List<Horse> searchHorse(HorseSearchDto horseSearchDto) {
+        LOGGER.trace("Search horse: {}", horseSearchDto);
         return horseDao.searchHorse(horseSearchDto);
     }
 }

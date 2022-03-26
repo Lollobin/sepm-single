@@ -27,19 +27,20 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public List<Owner> allOwners() {
-        LOGGER.info("Getting all owners");
+        LOGGER.trace("Getting all owners");
         return ownerDao.getAll();
     }
 
     @Override
     public Owner save(OwnerDto ownerDto) {
-        LOGGER.info("Saving {}", ownerDto.toString());
+        LOGGER.trace("Saving {}", ownerDto.toString());
         validator.validateOwner(ownerDto);
         return ownerDao.save(ownerDto);
     }
 
     @Override
     public List<Owner> searchOwner(OwnerSearchDto ownerSearchDto) {
+        LOGGER.trace("Search owner: {}", ownerSearchDto);
         return ownerDao.searchOwner(ownerSearchDto);
     }
 }

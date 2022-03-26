@@ -72,6 +72,7 @@ public class OwnerEndpoint {
     @GetMapping(params = {"name"})
     @ResponseStatus(HttpStatus.OK)
     public Stream<OwnerDto>searchOwner(OwnerSearchDto ownerSearchDto){
+        LOGGER.info("GET " + BASE_URL + "?name=" + ownerSearchDto.name());
         return ownerService.searchOwner(ownerSearchDto).stream()
                 .map(ownerMapper::entityToDto);
     }

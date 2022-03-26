@@ -151,7 +151,7 @@ public class HorseEndpoint {
      */
     @GetMapping(params = {"dateOfBirth", "parentSex", "searchString"})
     public Stream<HorseDto> searchParent(ParentSearchDto parentSearchDto) {
-        LOGGER.info("GET " + BASE_URL);
+        LOGGER.info("GET " + BASE_URL + "(searchParent)");
         return service.searchParent(parentSearchDto).stream()
                 .map(mapper::entityToDto);
     }

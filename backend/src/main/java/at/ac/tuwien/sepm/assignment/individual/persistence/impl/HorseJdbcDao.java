@@ -39,7 +39,8 @@ public class HorseJdbcDao implements HorseDao {
 
     @Override
     public Long save(HorseDto horseDto) {
-        LOGGER.info("Saving {}", horseDto.toString());
+        LOGGER.trace("Saving {}", horseDto);
+
         final String sql = "INSERT INTO " + TABLE_NAME +
                 " (name, description, dateOfBirth, sex, ownerId, fatherId, motherId)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?);";
@@ -61,7 +62,7 @@ public class HorseJdbcDao implements HorseDao {
 
     @Override
     public Horse update(Long horseId, HorseDto horseDto) {
-        LOGGER.info("Updating horse with ID {} to match {}", horseId, horseDto);
+        LOGGER.trace("Updating horse with ID {} to match {}", horseId, horseDto);
 
         this.getOneById(horseId);
 
@@ -86,7 +87,7 @@ public class HorseJdbcDao implements HorseDao {
 
     @Override
     public Horse getOneById(Long id) {
-        LOGGER.info("Get horse with id {}", id);
+        LOGGER.trace("Get horse with id {}", id);
 
         final String sql = SQL_SELECT_ALL_JOINED
                 + " WHERE horse.id = ?";
@@ -101,7 +102,7 @@ public class HorseJdbcDao implements HorseDao {
 
     @Override
     public void delete(Long id) {
-        LOGGER.info("Delete horse with id {}", id);
+        LOGGER.trace("Delete horse with id {}", id);
 
         final String sql = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
         int status = jdbcTemplate.update(sql, id.toString());
@@ -119,7 +120,7 @@ public class HorseJdbcDao implements HorseDao {
 
     @Override
     public List<Horse> searchParent(ParentSearchDto parentSearchDto) {
-        LOGGER.debug("Getting possible '" + parentSearchDto.parentSex()
+        LOGGER.trace("Getting possible '" + parentSearchDto.parentSex()
                 + "' parents of Horse(" + parentSearchDto.dateOfBirth()
                 + "): " + parentSearchDto.searchString());
 
@@ -141,7 +142,8 @@ public class HorseJdbcDao implements HorseDao {
 
     @Override
     public List<Horse> getAllChildren(Long id) {
-        LOGGER.info("Getting all children of horse " + id);
+        LOGGER.trace("Get all children of horse with id {}", id);
+
         String sql = "";
 
         Sex sex = getOneById(id).getSex();
@@ -156,7 +158,7 @@ public class HorseJdbcDao implements HorseDao {
 
     @Override
     public List<Horse> searchHorse(HorseSearchDto horseSearchDto) {
-        LOGGER.info("Getting possible horses for requested criteria");
+        LOGGER.trace("Search horse: {}", horseSearchDto);
 
         Object[] parameters = new Object[]{
                 horseSearchDto.name() == null ? null : "%" + horseSearchDto.name().toLowerCase() + "%",
