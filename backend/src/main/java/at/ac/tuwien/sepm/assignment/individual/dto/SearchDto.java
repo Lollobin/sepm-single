@@ -9,7 +9,7 @@ public class SearchDto {
     private String description;
     private java.sql.Date dateOfBirth;
     private Sex sex;
-    private Long ownerId;
+    private String owner;
 
     public String getName() {
         return name;
@@ -43,12 +43,11 @@ public class SearchDto {
         this.sex = sex;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
-
 }

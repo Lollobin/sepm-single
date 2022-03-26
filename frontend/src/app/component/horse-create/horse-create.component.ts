@@ -85,7 +85,6 @@ export class HorseCreateComponent implements OnInit {
 
     //console.info('The horse has been submitted', this.horseForm.value);
     this.horseForm.reset();
-    this.goBack();
   }
 
   get name() {

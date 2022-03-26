@@ -174,8 +174,8 @@ public class HorseJdbcDao implements HorseDao {
                 searchDto.getDateOfBirth(),
                 searchDto.getSex() == null ? null : searchDto.getSex().toString(),
                 searchDto.getSex() == null ? null : searchDto.getSex().toString(),
-                searchDto.getOwnerId() == null ? null : searchDto.getOwnerId().toString(),
-                searchDto.getOwnerId() == null ? null : searchDto.getOwnerId().toString()
+                searchDto.getOwner() == null ? null : "%" + searchDto.getOwner().toLowerCase() + "%",
+                searchDto.getOwner() == null ? null : "%" + searchDto.getOwner().toLowerCase() + "%"
         };
 
         final String sql = SQL_SELECT_ALL_JOINED
@@ -183,7 +183,7 @@ public class HorseJdbcDao implements HorseDao {
                 + " AND (? IS NULL OR LOWER(horse.name) LIKE ?)"
                 + " AND (? IS NULL OR horse.dateOfBirth = ?)"
                 + " AND (? IS NULL OR horse.sex = ?)"
-                + " AND (? IS NULL OR horse.ownerId = ?)";
+                + " AND (? IS NULL OR LOWER(CONCAT(owner.firstName, owner.lastName)) LIKE ?)";
 
         return jdbcTemplate.query(sql, this::mapRow, parameters);
     }

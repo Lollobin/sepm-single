@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HorseService} from "../../service/horse.service";
 import {Location} from "@angular/common";
 import {FormBuilder} from "@angular/forms";
-import {Horse} from "../../dto/horse";
+import {HorseParents} from "../../dto/horseParents";
 
 @Component({
   selector: 'app-horse-search',
@@ -11,15 +11,14 @@ import {Horse} from "../../dto/horse";
 })
 
 export class HorseSearchComponent implements OnInit {
-  results: Horse[];
+  results: HorseParents[];
 
   horseForm = this.formBuilder.group({
     name: null,
     description: null,
     dateOfBirth: null,
     sex: null,
-    father: null,
-    mother: null
+    owner: null
   })
 
   constructor(
@@ -38,7 +37,8 @@ export class HorseSearchComponent implements OnInit {
 
   onSubmit(): void {
     const value = this.horseForm.value;
-    this.horseService.searchHorse(value.name, value.description, value.dateOfBirth, value.sex)
+    console.log(value)
+    this.horseService.searchHorse(value.name, value.description, value.dateOfBirth, value.sex, value.owner)
       .subscribe({
         next: data => {
           this.results = data;

@@ -49,12 +49,12 @@ public class HorseEndpoint {
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public Stream<HorseDto> searchHorse(SearchDto searchDto) {
+    public Stream<HorseDtoFull> searchHorse(SearchDto searchDto) {
         LOGGER.info("GET " + BASE_URL + "/search");
         LOGGER.info(searchDto.getName());
 
         return service.searchHorse(searchDto).stream()
-                .map(mapper::entityToDto);
+                .map(mapper::entityToDtoFull);
     }
 
 

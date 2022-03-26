@@ -6,6 +6,7 @@ import {Horse} from '../dto/horse';
 import {catchError, map, tap} from 'rxjs/operators';
 import {MessageService} from "./message.service";
 import {HorseParents} from "../dto/horseParents";
+import {Owner} from "../dto/owner";
 
 const baseUri = environment.backendUrl + '/horses';
 
@@ -73,7 +74,7 @@ export class HorseService {
    * @param searchString
    */
   searchParent(dateOfBirth: Date, parentSex: string, searchString: string): Observable<Horse[]> {
-    this.log("searchString: "+ searchString)
+    this.log("searchString: " + searchString)
 
     let queryParams = new HttpParams()
       .append("dateOfBirth", dateOfBirth.toString())
@@ -84,7 +85,7 @@ export class HorseService {
       .pipe(catchError(this.handleError<Horse[]>('searchParent', [])));
   }
 
-  searchHorse(name: string, description: string, dateOfBirth: Date, sex: string): Observable<Horse[]> {
+  searchHorse(name: string, description: string, dateOfBirth: Date, sex: string, owner: string): Observable<HorseParents[]> {
     let queryParams = new HttpParams();
     if (name != null && name != '')
       queryParams = queryParams.append('name', name);
@@ -94,10 +95,13 @@ export class HorseService {
       queryParams = queryParams.append('dateOfBirth', dateOfBirth.toString());
     if (sex != null)
       queryParams = queryParams.append('sex', sex);
+    if (owner != null)
+      queryParams = queryParams.append('owner', owner);
+
     this.log("params " + queryParams.toString())
 
-    return this.http.get<Horse[]>(baseUri + "/search", {params: queryParams})
-      .pipe(catchError(this.handleError<Horse[]>('searchHorse', [])));
+    return this.http.get<HorseParents[]>(baseUri + "/search", {params: queryParams})
+      .pipe(catchError(this.handleError<HorseParents[]>('searchHorse', [])));
   }
 
   /**
