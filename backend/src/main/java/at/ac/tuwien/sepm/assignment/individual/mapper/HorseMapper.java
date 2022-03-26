@@ -41,7 +41,7 @@ public class HorseMapper {
      * @param horse  a horse entity object
      * @return the corresponding HorseDtoFull
      */
-    public HorseDtoFull entityToDtoParents(Horse horse) {
+    public HorseDtoFull entityToDtoFull(Horse horse) {
         LOGGER.trace("Converting entity to dto: {}", horse);
 
         return new HorseDtoFull(horse.getId(), horse.getName(), horse.getDescription(),

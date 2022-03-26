@@ -62,7 +62,7 @@ public class HorseEndpoint {
     public HorseDtoFull getOneById(@PathVariable("id") Long id) {
         LOGGER.info("GET " + BASE_URL + "/{}", id);
         try {
-            return mapper.entityToDtoParents(service.getOneById(id));
+            return mapper.entityToDtoFull(service.getOneById(id));
         } catch (NotFoundException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error during reading horse", e);

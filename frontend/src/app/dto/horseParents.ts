@@ -1,4 +1,5 @@
 import {Horse} from "./horse";
+import {Owner} from "./owner";
 
 export interface HorseParents {
   id?: bigint;
@@ -6,6 +7,7 @@ export interface HorseParents {
   description?: string;
   dateOfBirth: Date;
   sex: Sex;
+  owner?: Owner;
   father?: Horse;
   mother?: Horse;
 }

@@ -7,6 +7,8 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {debounceTime, distinctUntilChanged, Observable, of, switchMap} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {HorseParents} from "../../dto/horseParents";
+import {Owner} from "../../dto/owner";
+import {OwnerService} from "../../service/owner.service";
 
 @Component({
   selector: 'app-horse-edit',
@@ -19,7 +21,14 @@ export class HorseEditComponent implements OnInit {
   horse: Observable<HorseParents>;
   horseForm;
 
+  ownerFormatter = (result: Owner) => result.firstName + " " + result.lastName;
   formatter = (result: Horse) => result.name;
+
+  searchOwner = (searchText: Observable<string>) => searchText.pipe(
+    debounceTime(250),
+    distinctUntilChanged(),
+    switchMap((text) => this.ownerService.searchOwner(text)))
+    .pipe(catchError(() => of([])));
 
   searchFather = (searchText: Observable<string>) => searchText.pipe(
     debounceTime(250),
@@ -41,7 +50,8 @@ export class HorseEditComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private location: Location,
     private horseService: HorseService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private ownerService: OwnerService
   ) {
   }
 
@@ -57,6 +67,7 @@ export class HorseEditComponent implements OnInit {
         description: horse.description,
         dateOfBirth: horse.dateOfBirth,
         sex: horse.sex,
+        owner: horse.owner,
         father: horse.father,
         mother: horse.mother
       })
@@ -71,6 +82,7 @@ export class HorseEditComponent implements OnInit {
       description: value.description,
       dateOfBirth: value.dateOfBirth,
       sex: value.sex,
+      ownerId: value.owner == null ? null : value.owner.id,
       fatherId: value.father == null ? null : value.father.id,
       motherId: value.mother == null ? null : value.mother.id
     }

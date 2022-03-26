@@ -86,12 +86,14 @@ public class Validator {
         if (dateOfBirth == null)
             throw new ValidationException("Date of birth cannot be null");
 
-
         if (dateOfBirth.after(new java.sql.Date(System.currentTimeMillis())))
             throw new ValidationException("Date of birth cannot be in the future");
     }
 
     private void validateEmail(String email) {
+        if(email== null || email.equals(""))
+            return;
+
         String regexPattern = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         if (!Pattern.compile(regexPattern).matcher(email).matches())
             throw new ValidationException("Email is not a valid adress");
