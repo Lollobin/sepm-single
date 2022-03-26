@@ -34,7 +34,7 @@ export class HorseEditComponent implements OnInit {
     debounceTime(250),
     distinctUntilChanged(),
     switchMap((text) => this.horseService.searchParent(
-      this.horseForm.valid ? this.horseForm.value.dateOfBirth : undefined,
+      this.horseForm.value.dateOfBirth,
       'male',
       text))).pipe(catchError(() => of([])));
 
@@ -42,7 +42,7 @@ export class HorseEditComponent implements OnInit {
     debounceTime(250),
     distinctUntilChanged(),
     switchMap((text) => this.horseService.searchParent(
-      this.horseForm.valid ? this.horseForm.value.dateOfBirth : undefined,
+      this.horseForm.value.dateOfBirth,
       'female',
       text))).pipe(catchError(() => of([])));
 
