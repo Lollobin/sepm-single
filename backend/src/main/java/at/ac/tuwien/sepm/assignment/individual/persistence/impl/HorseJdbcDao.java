@@ -115,9 +115,8 @@ public class HorseJdbcDao implements HorseDao {
     @Override
     public void delete(Long id) {
         LOGGER.info("Delete horse with id {}", id);
-        //todo set entries in fatherId or motherId equal to id to null
 
-        final String sql = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
+        final String sql = SQL_SELECT_ALL + " WHERE id = ?";
         int status = jdbcTemplate.update(sql, id.toString());
 
         if (status != 1) {
@@ -136,10 +135,10 @@ public class HorseJdbcDao implements HorseDao {
         LOGGER.info("Getting possible " + parentSex + " parents of Horse(" + dateOfBirth + "): " + searchString);
 
         final String sql = SQL_SELECT_ALL_JOINED
-                +" WHERE LOWER(horse.name) LIKE ?"
-                +" AND horse.sex = ?"
-                +" AND horse.dateOfBirth < ?"
-                +"LIMIT 5";
+                + " WHERE LOWER(horse.name) LIKE ?"
+                + " AND horse.sex = ?"
+                + " AND horse.dateOfBirth < ?"
+                + "LIMIT 5";
 
         return jdbcTemplate.query(sql, this::mapRow,
                 "%" + searchString.toLowerCase() + "%",
@@ -200,18 +199,18 @@ public class HorseJdbcDao implements HorseDao {
         horse.setSex(Sex.valueOf(result.getString("horse.sex")));
 
         result.getLong("horse.ownerId");
-        if(!result.wasNull()){
+        if (!result.wasNull()) {
             Owner owner = new Owner();
             owner.setId(result.getLong("owner.id"));
             owner.setFirstName(result.getString("owner.firstName"));
             owner.setLastName(result.getString("owner.lastName"));
             owner.setEmail(result.getString("owner.email"));
-            if(result.wasNull()) owner.setEmail(null);
+            if (result.wasNull()) owner.setEmail(null);
             horse.setOwner(owner);
         }
 
         result.getLong("horse.fatherId");
-        if(!result.wasNull()){
+        if (!result.wasNull()) {
             Horse father = new Horse();
             father.setId(result.getLong(13));
             father.setName(result.getString(14));
@@ -222,7 +221,7 @@ public class HorseJdbcDao implements HorseDao {
         }
 
         result.getLong("horse.motherId");
-        if(!result.wasNull()){
+        if (!result.wasNull()) {
             Horse mother = new Horse();
             mother.setId(result.getLong(21));
             mother.setName(result.getString(22));
