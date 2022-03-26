@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.individual.rest;
 
-import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoParents;
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoFull;
 import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
@@ -53,17 +53,16 @@ public class HorseEndpoint {
         LOGGER.info("GET " + BASE_URL + "/search");
         LOGGER.info(searchDto.getName());
 
-
         return service.searchHorse(searchDto).stream()
                 .map(mapper::entityToDto);
     }
 
 
     @GetMapping(value = "/{id}")
-    public HorseDtoParents getOneById(@PathVariable("id") Long id) {
+    public HorseDtoFull getOneById(@PathVariable("id") Long id) {
         LOGGER.info("GET " + BASE_URL + "/{}", id);
         try {
-            return service.getOneById(id);
+            return mapper.entityToDtoParents(service.getOneById(id));
         } catch (NotFoundException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error during reading horse", e);
@@ -81,15 +80,15 @@ public class HorseEndpoint {
      * Store a horse in the database.
      *
      * @param horseDto data transfer object of horse
-     * @return horseDto resembling the stored horse with generated ID
+     * @return generated ID
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public HorseDto post(@RequestBody HorseDto horseDto) {
+    public Long post(@RequestBody HorseDto horseDto) {
         LOGGER.info("POST " + BASE_URL + " {" + horseDto.toString() + "}");
 
         try {
-            return mapper.entityToDto(service.save(horseDto));
+            return service.save(horseDto);
         } catch (ValidationException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Parameters are not valid", e);

@@ -23,9 +23,9 @@ public interface HorseDao {
      * Save a single horse in the persistent data store.
      *
      * @param horseDto data transfer object of horse to be saved
-     * @return corresponding entity with generated ID
+     * @return generated ID
      */
-    Horse save(HorseDto horseDto);
+    Long save(HorseDto horseDto);
 
     /**
      * Update horse with ID 'horseId' in persistent data store to match 'horseDto'.

@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.service.impl;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
-import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoParents;
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoFull;
 import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
@@ -37,7 +37,7 @@ public class HorseServiceImpl implements HorseService {
     }
 
     @Override
-    public Horse save(HorseDto horseDto) {
+    public Long save(HorseDto horseDto) {
         LOGGER.info("Saving {}", horseDto.toString());
         validator.validateHorse(horseDto);
         return horseDao.save(horseDto);
@@ -53,22 +53,9 @@ public class HorseServiceImpl implements HorseService {
     }
 
     @Override
-    public HorseDtoParents getOneById(Long id) {
+    public Horse getOneById(Long id) {
         LOGGER.info("Get horse with id {}", id);
-        Horse horse = horseDao.getOneById(id);
-
-        Horse father = null;
-        Horse mother = null;
-
-        if (horse.getFatherId() != null) {
-            father = horseDao.getOneById(horse.getFatherId());
-        }
-
-        if (horse.getMotherId() != null) {
-            mother = horseDao.getOneById(horse.getMotherId());
-        }
-
-        return horseMapper.entityToDtoParents(horse, father, mother);
+        return horseDao.getOneById(id);
     }
 
     @Override

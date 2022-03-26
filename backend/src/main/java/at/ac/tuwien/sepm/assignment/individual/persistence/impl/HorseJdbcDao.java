@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.individual.persistence.impl;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
+import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
 import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
@@ -15,7 +16,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -24,6 +24,10 @@ public class HorseJdbcDao implements HorseDao {
     private static final String TABLE_NAME = "horse";
     private static final Logger LOGGER = LoggerFactory.getLogger(HorseJdbcDao.class);
     private static final String SQL_SELECT_ALL = "SELECT * FROM " + TABLE_NAME;
+    private static final String SQL_SELECT_ALL_JOINED = SQL_SELECT_ALL
+            + " LEFT JOIN owner ON horse.ownerid = owner.id"
+            + " LEFT JOIN horse AS father ON horse.fatherid = father.id"
+            + " LEFT JOIN horse AS mother ON horse.motherid = mother.id";
     private static final HorseMapper MAPPER = new HorseMapper();
 
     private final JdbcTemplate jdbcTemplate;
@@ -35,11 +39,12 @@ public class HorseJdbcDao implements HorseDao {
     @Override
     public List<Horse> getAll() {
         LOGGER.info("Getting all horses");
-        return jdbcTemplate.query(SQL_SELECT_ALL, this::mapRow);
+        final String sql = SQL_SELECT_ALL_JOINED;
+        return jdbcTemplate.query(sql, this::mapRow);
     }
 
     @Override
-    public Horse save(HorseDto horseDto) {
+    public Long save(HorseDto horseDto) {
         LOGGER.info("Saving {}", horseDto.toString());
         final String sql = "INSERT INTO " + TABLE_NAME +
                 " (name, description, dateOfBirth, sex, ownerId, fatherId, motherId)" +
@@ -57,9 +62,7 @@ public class HorseJdbcDao implements HorseDao {
             return stmt;
         }, keyHolder);
 
-        Horse horse = MAPPER.dtoToEntity(horseDto);
-        horse.setId(((Number) keyHolder.getKeys().get("id")).longValue());
-        return horse;
+        return ((Number) keyHolder.getKeys().get("id")).longValue();
     }
 
     @Override
@@ -85,17 +88,22 @@ public class HorseJdbcDao implements HorseDao {
             return stmt;
         });
 
+        /*
         Horse horse = MAPPER.dtoToEntity(horseDto);
         horse.setId(horseId);
+         */
 
-        return horse;
+        return null;
     }
 
     @Override
     public Horse getOneById(Long id) {
         LOGGER.info("Get horse with id {}", id);
 
-        final String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id=?";
+        final String sql = SQL_SELECT_ALL_JOINED
+                + " WHERE horse.id = ?";
+
+
         List<Horse> horses = jdbcTemplate.query(sql, this::mapRow, id);
         if (horses.isEmpty()) {
             throw new NotFoundException(String.format("Could not find horse with id %s", id));
@@ -127,11 +135,11 @@ public class HorseJdbcDao implements HorseDao {
     public List<Horse> searchParent(Date dateOfBirth, Sex parentSex, String searchString) {
         LOGGER.info("Getting possible " + parentSex + " parents of Horse(" + dateOfBirth + "): " + searchString);
 
-        final String sql = "SELECT * FROM " + TABLE_NAME +
-                " WHERE LOWER(name) LIKE ?" +
-                " AND sex = ?" +
-                " AND dateOfBirth < ?" +
-                "LIMIT 5";
+        final String sql = SQL_SELECT_ALL_JOINED
+                +" WHERE LOWER(horse.name) LIKE ?"
+                +" AND horse.sex = ?"
+                +" AND horse.dateOfBirth < ?"
+                +"LIMIT 5";
 
         return jdbcTemplate.query(sql, this::mapRow,
                 "%" + searchString.toLowerCase() + "%",
@@ -146,10 +154,10 @@ public class HorseJdbcDao implements HorseDao {
 
         Sex sex = getOneById(id).getSex();
         if (sex == Sex.male) {
-            sql = SQL_SELECT_ALL + " WHERE fatherId = ?";
+            sql = SQL_SELECT_ALL_JOINED + " WHERE horse.fatherId = ?";
         }
         if (sex == Sex.female) {
-            sql = SQL_SELECT_ALL + " WHERE motherId = ?";
+            sql = SQL_SELECT_ALL_JOINED + " WHERE horse.motherId = ?";
         }
         return jdbcTemplate.query(sql, this::mapRow, id);
     }
@@ -171,30 +179,59 @@ public class HorseJdbcDao implements HorseDao {
                 searchDto.getOwnerId() == null ? null : searchDto.getOwnerId().toString()
         };
 
-        final String sql = SQL_SELECT_ALL
-                + " WHERE (? IS NULL OR LOWER(name) LIKE ?)"
-                + " AND (? IS NULL OR LOWER(name) LIKE ?)"
-                + " AND (? IS NULL OR dateOfBirth = ?)"
-                + " AND (? IS NULL OR sex = ?)"
-                + " AND (? IS NULL OR ownerId = ?)";
+        final String sql = SQL_SELECT_ALL_JOINED
+                + " WHERE (? IS NULL OR LOWER(horse.name) LIKE ?)"
+                + " AND (? IS NULL OR LOWER(horse.name) LIKE ?)"
+                + " AND (? IS NULL OR horse.dateOfBirth = ?)"
+                + " AND (? IS NULL OR horse.sex = ?)"
+                + " AND (? IS NULL OR horse.ownerId = ?)";
 
         return jdbcTemplate.query(sql, this::mapRow, parameters);
     }
 
     private Horse mapRow(ResultSet result, int rowNum) throws SQLException {
         LOGGER.trace("Mapping row {} onto horse", rowNum);
+
         Horse horse = new Horse();
-        horse.setId(result.getLong("id"));
-        horse.setName(result.getString("name"));
-        horse.setDescription(result.getString("description"));
-        horse.setDateOfBirth(result.getDate("dateOfBirth"));
-        horse.setSex(Sex.valueOf(result.getString("sex")));
-        horse.setOwnerId(result.getLong("ownerId"));
-        if (result.wasNull()) horse.setOwnerId(null);
-        horse.setFatherId(result.getLong("fatherId"));
-        if (result.wasNull()) horse.setFatherId(null);
-        horse.setMotherId(result.getLong("motherId"));
-        if (result.wasNull()) horse.setMotherId(null);
+        horse.setId(result.getLong("horse.id"));
+        horse.setName(result.getString("horse.name"));
+        horse.setDescription(result.getString("horse.description"));
+        horse.setDateOfBirth(result.getDate("horse.dateOfBirth"));
+        horse.setSex(Sex.valueOf(result.getString("horse.sex")));
+
+        result.getLong("horse.ownerId");
+        if(!result.wasNull()){
+            Owner owner = new Owner();
+            owner.setId(result.getLong("owner.id"));
+            owner.setFirstName(result.getString("owner.firstName"));
+            owner.setLastName(result.getString("owner.lastName"));
+            owner.setEmail(result.getString("owner.email"));
+            if(result.wasNull()) owner.setEmail(null);
+            horse.setOwner(owner);
+        }
+
+        result.getLong("horse.fatherId");
+        if(!result.wasNull()){
+            Horse father = new Horse();
+            father.setId(result.getLong(13));
+            father.setName(result.getString(14));
+            father.setDescription(result.getString(15));
+            father.setDateOfBirth(result.getDate(16));
+            father.setSex(Sex.valueOf(result.getString(17)));
+            horse.setFather(father);
+        }
+
+        result.getLong("horse.motherId");
+        if(!result.wasNull()){
+            Horse mother = new Horse();
+            mother.setId(result.getLong(21));
+            mother.setName(result.getString(22));
+            mother.setDescription(result.getString(23));
+            mother.setDateOfBirth(result.getDate(24));
+            mother.setSex(Sex.valueOf(result.getString(25)));
+            horse.setMother(mother);
+        }
+
         return horse;
     }
 }

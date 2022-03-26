@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.service;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
-import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoParents;
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoFull;
 import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
@@ -23,9 +23,9 @@ public interface HorseService {
      * Validates horse and forwards it for saving in database.
      *
      * @param horseDto the horse to be validated and saved
-     * @return horse with generated ID
+     * @return generated ID
      */
-    Horse save(HorseDto horseDto);
+    Long save(HorseDto horseDto);
 
     /**
      * Validates parameters of horseDto and checks if horse with "horseId" exists.
@@ -43,7 +43,7 @@ public interface HorseService {
      * @param id id of horse to be fetched.
      * @return horse with id.
      */
-    HorseDtoParents getOneById(Long id);
+    Horse getOneById(Long id);
 
 
     /**

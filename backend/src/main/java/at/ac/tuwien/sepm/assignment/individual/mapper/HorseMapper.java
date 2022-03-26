@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.mapper;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
-import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoParents;
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoFull;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,22 +29,24 @@ public class HorseMapper {
         }
 
         return new HorseDto(horse.getId(), horse.getName(), horse.getDescription(),
-                horse.getDateOfBirth(), horse.getSex(), horse.getOwnerId(), horse.getFatherId(), horse.getMotherId());
+                horse.getDateOfBirth(), horse.getSex(),
+                horse.getOwner() == null ? null : horse.getOwner().getId(),
+                horse.getFather() == null ? null : horse.getFather().getId(),
+                horse.getMother() == null ? null : horse.getMother().getId());
     }
 
     /**
-     * Returns a HorseDtoParents with the parameters of the given entity.
+     * Returns a HorseDtoFull with the parameters of the given entity.
      *
      * @param horse  a horse entity object
-     * @param father entity object of the father
-     * @param mother entity object of the mother
-     * @return the corresponding HorseDtoParents
+     * @return the corresponding HorseDtoFull
      */
-    public HorseDtoParents entityToDtoParents(Horse horse, Horse father, Horse mother) {
+    public HorseDtoFull entityToDtoParents(Horse horse) {
         LOGGER.trace("Converting entity to dto: {}", horse);
 
-        return new HorseDtoParents(horse.getId(), horse.getName(), horse.getDescription(),
-                horse.getDateOfBirth(), horse.getSex(), horse.getOwnerId(), entityToDto(father), entityToDto(mother));
+        return new HorseDtoFull(horse.getId(), horse.getName(), horse.getDescription(),
+                horse.getDateOfBirth(), horse.getSex(), horse.getOwner(),
+                entityToDto(horse.getFather()), entityToDto(horse.getMother()));
     }
 
 
@@ -54,6 +56,7 @@ public class HorseMapper {
      * @param horseDto a horse dto
      * @return the corresponding Horse entity
      */
+    /*
     public Horse dtoToEntity(HorseDto horseDto) {
         LOGGER.trace("Converting dto to entity: {}", horseDto);
 
@@ -63,9 +66,12 @@ public class HorseMapper {
         horse.setDescription(horseDto.description());
         horse.setDateOfBirth(horseDto.dateOfBirth());
         horse.setSex(horseDto.sex());
+        if(horseDto.o== null)
         horse.setOwnerId(horseDto.ownerId());
         horse.setFatherId(horseDto.fatherId());
         horse.setMotherId(horseDto.motherId());
         return horse;
     }
+
+     */
 }
