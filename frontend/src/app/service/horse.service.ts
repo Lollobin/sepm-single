@@ -99,7 +99,7 @@ export class HorseService {
     if (owner != null && owner != '')
       queryParams = queryParams.append('owner', owner);
 
-    return this.http.get<HorseParents[]>(baseUri + "/search", {params: queryParams})
+    return this.http.get<HorseParents[]>(baseUri, {params: queryParams})
       .pipe(catchError(this.handleError<HorseParents[]>('searchHorse', [])));
   }
 

@@ -11,12 +11,6 @@ import java.util.List;
  * Service for working with horses.
  */
 public interface HorseService {
-    /**
-     * Lists all horses stored in the system.
-     *
-     * @return list of all stored horses
-     */
-    List<Horse> allHorses();
 
     /**
      * Validates horse and forwards it for saving in database.

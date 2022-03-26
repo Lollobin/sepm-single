@@ -38,13 +38,6 @@ public class HorseJdbcDao implements HorseDao {
     }
 
     @Override
-    public List<Horse> getAll() {
-        LOGGER.info("Getting all horses");
-        final String sql = SQL_SELECT_ALL_JOINED;
-        return jdbcTemplate.query(sql, this::mapRow);
-    }
-
-    @Override
     public Long save(HorseDto horseDto) {
         LOGGER.info("Saving {}", horseDto.toString());
         final String sql = "INSERT INTO " + TABLE_NAME +

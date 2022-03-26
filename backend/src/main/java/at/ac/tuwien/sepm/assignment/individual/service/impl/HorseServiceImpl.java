@@ -26,12 +26,6 @@ public class HorseServiceImpl implements HorseService {
     }
 
     @Override
-    public List<Horse> allHorses() {
-        LOGGER.info("Getting all horses");
-        return horseDao.getAll();
-    }
-
-    @Override
     public Long save(HorseDto horseDto) {
         LOGGER.info("Saving {}", horseDto.toString());
         validator.validateHorse(horseDto);

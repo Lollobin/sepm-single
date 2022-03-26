@@ -36,24 +36,13 @@ public class HorseEndpoint {
     }
 
     /**
-     * Returns all horses.
-     *
-     * @return all horses that are currently in the database.
-     */
-    @GetMapping
-    public Stream<HorseDto> allHorses() {
-        LOGGER.debug("GET " + BASE_URL);
-        return service.allHorses().stream()
-                .map(mapper::entityToDto);
-    }
-
-    /**
      * Returns all horses that match the search parameters.
+     * If parameters are empty, all stored horses are returned.
      *
      * @param horseSearchDto parameters to search horse (name, description, date of birth, sex, name of owner)
      * @return all matching horses
      */
-    @GetMapping("/search")
+    @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public Stream<HorseDtoFull> searchHorse(HorseSearchDto horseSearchDto) {
         LOGGER.info("GET " + BASE_URL + "/search");

@@ -10,7 +10,7 @@
     <li class="list-group-item"><b>Description:</b> {{horse.description}}</li>
     <li class="list-group-item"><b>Date of birth:</b> {{horse.dateOfBirth}}</li>
     <li class="list-group-item"><b>Sex:</b> {{horse.sex}}</li>
-    <li class="list-group-item"><b>Owner:</b> {{horse.owner.firstName + " " + horse.owner.lastName}}</li>
+    <li class="list-group-item" *ngIf="horse.owner"><b>Owner:</b> {{horse.owner.firstName + " " + horse.owner.lastName}}</li>
     <li class="list-group-item" *ngIf="horse.father">
       <b>Father:</b> {{horse.father.name}}
       <button class="btn btn-secondary btn-sm" routerLink="/horses/{{horse.father.id}}">Details</button>
