@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.individual.persistence;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseSearchDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.ParentSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 
@@ -53,13 +54,12 @@ public interface HorseDao {
   void delete(Long id);
 
     /**
-     * todo add doc
-     * @param dateOfBirth
-     * @param parentSex
-     * @param searchString
-     * @return
+     * Returns possible parents for horse.
+     *
+     * @param parentSearchDto parameters to search parents
+     * @return possible parents
      */
-  List<Horse> searchParent(LocalDate dateOfBirth, Sex parentSex, String searchString);
+  List<Horse> searchParent(ParentSearchDto parentSearchDto);
 
     /**
      * todo add doc

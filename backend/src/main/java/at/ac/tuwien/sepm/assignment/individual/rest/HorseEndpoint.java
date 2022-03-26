@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.individual.rest;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoFull;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseSearchDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.ParentSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
 import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
@@ -27,6 +28,7 @@ public class HorseEndpoint {
 
     static final String BASE_URL = "/horses";
     private static final Logger LOGGER = LoggerFactory.getLogger(HorseEndpoint.class);
+
     private final HorseService service;
     private final HorseMapper mapper;
 
@@ -42,12 +44,17 @@ public class HorseEndpoint {
      */
     @GetMapping
     public Stream<HorseDto> allHorses() {
-        LOGGER.info("GET " + BASE_URL);
+        LOGGER.debug("GET " + BASE_URL);
         return service.allHorses().stream()
                 .map(mapper::entityToDto);
     }
 
-
+    /**
+     * Returns all horses that match the search parameters.
+     *
+     * @param horseSearchDto parameters to search horse (name, description, date of birth, sex, name of owner)
+     * @return all matching horses
+     */
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public Stream<HorseDtoFull> searchHorse(HorseSearchDto horseSearchDto) {
@@ -58,7 +65,12 @@ public class HorseEndpoint {
                 .map(mapper::entityToDtoFull);
     }
 
-
+    /**
+     * Returns horse with the given id.
+     *
+     * @param id id of the horse to return
+     * @return horse corresponding to the id
+     */
     @GetMapping(value = "/{id}")
     public HorseDtoFull getOneById(@PathVariable("id") Long id) {
         LOGGER.info("GET " + BASE_URL + "/{}", id);
@@ -70,6 +82,13 @@ public class HorseEndpoint {
         }
     }
 
+    /**
+     * Returns all children of a horse.
+     * Currently not used with frontend.
+     *
+     * @param id id of horse of which to return the children
+     * @return children of horse with id
+     */
     @GetMapping("/{id}/children")
     public Stream<HorseDto> getAllChildren(@PathVariable("id") Long id) {
         LOGGER.info("GET" + BASE_URL + "/{}/children", id);
@@ -81,7 +100,7 @@ public class HorseEndpoint {
      * Store a horse in the database.
      *
      * @param horseDto data transfer object of horse
-     * @return generated ID
+     * @return generated id
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -97,10 +116,10 @@ public class HorseEndpoint {
     }
 
     /**
-     * Edit a horse by ID in the database
+     * Edit a horse by id in the database
      *
-     * @param horseId  ID of horse to be edited
-     * @param horseDto new data for horse (ID is ignored)
+     * @param horseId  id of horse to be edited
+     * @param horseDto new data for horse (horseDto.id is ignored)
      * @return horseDto resembling the edited horse
      */
     @PutMapping("/{horseId}")
@@ -122,7 +141,7 @@ public class HorseEndpoint {
     /**
      * Delete horse with id.
      *
-     * @param horseId id of horse to be deleted.
+     * @param horseId id of horse to be deleted
      */
     @DeleteMapping("/{horseId}")
     @ResponseStatus(HttpStatus.OK)
@@ -137,10 +156,16 @@ public class HorseEndpoint {
         }
     }
 
+    /**
+     * Returns possible parents for horse.
+     *
+     * @param parentSearchDto parameters to search parents
+     * @return possible parents
+     */
     @GetMapping(params = {"dateOfBirth", "parentSex", "searchString"})
-    public Stream<HorseDto> searchParent(@RequestParam LocalDate dateOfBirth, @RequestParam Sex parentSex, @RequestParam String searchString) {
+    public Stream<HorseDto> searchParent(ParentSearchDto parentSearchDto) {
         LOGGER.info("GET " + BASE_URL);
-        return service.searchParent(dateOfBirth, parentSex, searchString).stream()
+        return service.searchParent(parentSearchDto).stream()
                 .map(mapper::entityToDto);
     }
 

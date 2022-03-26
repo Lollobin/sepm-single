@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.individual.persistence.impl;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseSearchDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.ParentSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
@@ -117,7 +118,7 @@ public class HorseJdbcDao implements HorseDao {
     public void delete(Long id) {
         LOGGER.info("Delete horse with id {}", id);
 
-        final String sql = "DELETE FROM " +TABLE_NAME+ " WHERE id = ?";
+        final String sql = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
         int status = jdbcTemplate.update(sql, id.toString());
 
         if (status != 1) {
@@ -132,8 +133,10 @@ public class HorseJdbcDao implements HorseDao {
     }
 
     @Override
-    public List<Horse> searchParent(LocalDate dateOfBirth, Sex parentSex, String searchString) {
-        LOGGER.info("Getting possible " + parentSex + " parents of Horse(" + dateOfBirth + "): " + searchString);
+    public List<Horse> searchParent(ParentSearchDto parentSearchDto) {
+        LOGGER.debug("Getting possible '" + parentSearchDto.parentSex()
+                + "' parents of Horse(" + parentSearchDto.dateOfBirth()
+                + "): " + parentSearchDto.searchString());
 
         final String sql = SQL_SELECT_ALL_JOINED
                 + " WHERE LOWER(horse.name) LIKE ?"
@@ -142,9 +145,9 @@ public class HorseJdbcDao implements HorseDao {
                 + "LIMIT 5";
 
         return jdbcTemplate.query(sql, this::mapRow,
-                "%" + searchString.toLowerCase() + "%",
-                parentSex.toString(),
-                dateOfBirth);
+                "%" + parentSearchDto.searchString().toLowerCase() + "%",
+                parentSearchDto.parentSex().toString(),
+                parentSearchDto.dateOfBirth());
     }
 
     @Override
@@ -231,7 +234,6 @@ public class HorseJdbcDao implements HorseDao {
             mother.setSex(Sex.valueOf(result.getString(25)));
             horse.setMother(mother);
         }
-
         return horse;
     }
 }
