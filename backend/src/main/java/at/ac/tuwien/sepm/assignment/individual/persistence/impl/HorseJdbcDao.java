@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.persistence.impl;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
-import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
@@ -16,6 +16,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -116,7 +117,7 @@ public class HorseJdbcDao implements HorseDao {
     public void delete(Long id) {
         LOGGER.info("Delete horse with id {}", id);
 
-        final String sql = SQL_SELECT_ALL + " WHERE id = ?";
+        final String sql = "DELETE FROM " +TABLE_NAME+ " WHERE id = ?";
         int status = jdbcTemplate.update(sql, id.toString());
 
         if (status != 1) {
@@ -131,7 +132,7 @@ public class HorseJdbcDao implements HorseDao {
     }
 
     @Override
-    public List<Horse> searchParent(Date dateOfBirth, Sex parentSex, String searchString) {
+    public List<Horse> searchParent(LocalDate dateOfBirth, Sex parentSex, String searchString) {
         LOGGER.info("Getting possible " + parentSex + " parents of Horse(" + dateOfBirth + "): " + searchString);
 
         final String sql = SQL_SELECT_ALL_JOINED
@@ -162,20 +163,20 @@ public class HorseJdbcDao implements HorseDao {
     }
 
     @Override
-    public List<Horse> searchHorse(SearchDto searchDto) {
+    public List<Horse> searchHorse(HorseSearchDto horseSearchDto) {
         LOGGER.info("Getting possible horses for requested criteria");
 
         Object[] parameters = new Object[]{
-                searchDto.getName() == null ? null : "%" + searchDto.getName().toLowerCase() + "%",
-                searchDto.getName() == null ? null : "%" + searchDto.getName().toLowerCase() + "%",
-                searchDto.getDescription() == null ? null : "%" + searchDto.getDescription().toLowerCase() + "%",
-                searchDto.getDescription() == null ? null : "%" + searchDto.getDescription().toLowerCase() + "%",
-                searchDto.getDateOfBirth(),
-                searchDto.getDateOfBirth(),
-                searchDto.getSex() == null ? null : searchDto.getSex().toString(),
-                searchDto.getSex() == null ? null : searchDto.getSex().toString(),
-                searchDto.getOwner() == null ? null : "%" + searchDto.getOwner().toLowerCase() + "%",
-                searchDto.getOwner() == null ? null : "%" + searchDto.getOwner().toLowerCase() + "%"
+                horseSearchDto.name() == null ? null : "%" + horseSearchDto.name().toLowerCase() + "%",
+                horseSearchDto.name() == null ? null : "%" + horseSearchDto.name().toLowerCase() + "%",
+                horseSearchDto.description() == null ? null : "%" + horseSearchDto.description().toLowerCase() + "%",
+                horseSearchDto.description() == null ? null : "%" + horseSearchDto.description().toLowerCase() + "%",
+                horseSearchDto.dateOfBirth(),
+                horseSearchDto.dateOfBirth(),
+                horseSearchDto.sex() == null ? null : horseSearchDto.sex().toString(),
+                horseSearchDto.sex() == null ? null : horseSearchDto.sex().toString(),
+                horseSearchDto.owner() == null ? null : "%" + horseSearchDto.owner().toLowerCase() + "%",
+                horseSearchDto.owner() == null ? null : "%" + horseSearchDto.owner().toLowerCase() + "%"
         };
 
         final String sql = SQL_SELECT_ALL_JOINED
@@ -195,7 +196,7 @@ public class HorseJdbcDao implements HorseDao {
         horse.setId(result.getLong("horse.id"));
         horse.setName(result.getString("horse.name"));
         horse.setDescription(result.getString("horse.description"));
-        horse.setDateOfBirth(result.getDate("horse.dateOfBirth"));
+        horse.setDateOfBirth(result.getDate("horse.dateOfBirth").toLocalDate());
         horse.setSex(Sex.valueOf(result.getString("horse.sex")));
 
         result.getLong("horse.ownerId");
@@ -215,7 +216,7 @@ public class HorseJdbcDao implements HorseDao {
             father.setId(result.getLong(13));
             father.setName(result.getString(14));
             father.setDescription(result.getString(15));
-            father.setDateOfBirth(result.getDate(16));
+            father.setDateOfBirth(result.getDate(16).toLocalDate());
             father.setSex(Sex.valueOf(result.getString(17)));
             horse.setFather(father);
         }
@@ -226,7 +227,7 @@ public class HorseJdbcDao implements HorseDao {
             mother.setId(result.getLong(21));
             mother.setName(result.getString(22));
             mother.setDescription(result.getString(23));
-            mother.setDateOfBirth(result.getDate(24));
+            mother.setDateOfBirth(result.getDate(24).toLocalDate());
             mother.setSex(Sex.valueOf(result.getString(25)));
             horse.setMother(mother);
         }

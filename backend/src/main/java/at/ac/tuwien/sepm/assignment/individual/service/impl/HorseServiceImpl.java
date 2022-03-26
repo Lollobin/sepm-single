@@ -1,8 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.service.impl;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
-import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoFull;
-import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
@@ -13,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -65,7 +64,7 @@ public class HorseServiceImpl implements HorseService {
     }
 
     @Override
-    public List<Horse> searchParent(Date dateOfBirth, Sex parentSex, String searchString) {
+    public List<Horse> searchParent(LocalDate dateOfBirth, Sex parentSex, String searchString) {
         return horseDao.searchParent(dateOfBirth, parentSex, searchString);
     }
 
@@ -75,7 +74,7 @@ public class HorseServiceImpl implements HorseService {
     }
 
     @Override
-    public List<Horse> searchHorse(SearchDto searchDto) {
-        return horseDao.searchHorse(searchDto);
+    public List<Horse> searchHorse(HorseSearchDto horseSearchDto) {
+        return horseDao.searchHorse(horseSearchDto);
     }
 }

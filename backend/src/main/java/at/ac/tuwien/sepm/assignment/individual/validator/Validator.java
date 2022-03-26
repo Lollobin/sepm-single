@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -66,7 +67,7 @@ public class Validator {
 
         if (oldHorse.getDateOfBirth() != horseDto.dateOfBirth())
             for (Horse child : children)
-                if (oldHorse.getDateOfBirth().after(child.getDateOfBirth()))
+                if (oldHorse.getDateOfBirth().isAfter(child.getDateOfBirth()))
                     throw new ValidationException("Cannot change horse to be younger than its child");
     }
 
@@ -80,13 +81,13 @@ public class Validator {
             throw new ValidationException("Name cannot be empty or only spaces");
     }
 
-    private void validateDateOfBirth(java.sql.Date dateOfBirth) {
+    private void validateDateOfBirth(LocalDate dateOfBirth) {
         LOGGER.trace("Validating dateOfBirth '{}'", dateOfBirth);
 
         if (dateOfBirth == null)
             throw new ValidationException("Date of birth cannot be null");
 
-        if (dateOfBirth.after(new java.sql.Date(System.currentTimeMillis())))
+        if (dateOfBirth.isAfter(LocalDate.now()))
             throw new ValidationException("Date of birth cannot be in the future");
     }
 
@@ -106,12 +107,12 @@ public class Validator {
 
     }
 
-    private void validateParents(Long fatherId, Long motherId, java.sql.Date dateOfBirth) {
+    private void validateParents(Long fatherId, Long motherId, LocalDate dateOfBirth) {
         if (fatherId != null) {
             Horse father = dao.getOneById(fatherId);
             if (father.getSex() == Sex.female)
                 throw new ValidationException("Father has to be male");
-            if (father.getDateOfBirth().after(dateOfBirth))
+            if (father.getDateOfBirth().isAfter(dateOfBirth))
                 throw new ValidationException("Father cannot be younger than horse");
         }
 
@@ -119,7 +120,7 @@ public class Validator {
             Horse mother = dao.getOneById(motherId);
             if (mother.getSex() == Sex.male)
                 throw new ValidationException("Mother has to be female");
-            if (mother.getDateOfBirth().after(dateOfBirth))
+            if (mother.getDateOfBirth().isAfter(dateOfBirth))
                 throw new ValidationException("Mother cannot be younger than horse");
         }
     }

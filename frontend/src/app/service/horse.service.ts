@@ -95,7 +95,7 @@ export class HorseService {
       queryParams = queryParams.append('dateOfBirth', dateOfBirth.toString());
     if (sex != null)
       queryParams = queryParams.append('sex', sex);
-    if (owner != null)
+    if (owner != null && owner != '')
       queryParams = queryParams.append('owner', owner);
 
     this.log("params " + queryParams.toString())

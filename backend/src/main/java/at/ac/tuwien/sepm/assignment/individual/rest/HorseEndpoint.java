@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.individual.rest;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoFull;
-import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
 import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.stream.Stream;
 
 /**
@@ -49,11 +50,11 @@ public class HorseEndpoint {
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public Stream<HorseDtoFull> searchHorse(SearchDto searchDto) {
+    public Stream<HorseDtoFull> searchHorse(HorseSearchDto horseSearchDto) {
         LOGGER.info("GET " + BASE_URL + "/search");
-        LOGGER.info(searchDto.getName());
+        LOGGER.info(horseSearchDto.name());
 
-        return service.searchHorse(searchDto).stream()
+        return service.searchHorse(horseSearchDto).stream()
                 .map(mapper::entityToDtoFull);
     }
 
@@ -137,7 +138,7 @@ public class HorseEndpoint {
     }
 
     @GetMapping(params = {"dateOfBirth", "parentSex", "searchString"})
-    public Stream<HorseDto> searchParent(@RequestParam java.sql.Date dateOfBirth, @RequestParam Sex parentSex, @RequestParam String searchString) {
+    public Stream<HorseDto> searchParent(@RequestParam LocalDate dateOfBirth, @RequestParam Sex parentSex, @RequestParam String searchString) {
         LOGGER.info("GET " + BASE_URL);
         return service.searchParent(dateOfBirth, parentSex, searchString).stream()
                 .map(mapper::entityToDto);

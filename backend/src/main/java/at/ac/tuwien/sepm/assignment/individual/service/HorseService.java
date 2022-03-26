@@ -1,11 +1,11 @@
 package at.ac.tuwien.sepm.assignment.individual.service;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
-import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoFull;
-import at.ac.tuwien.sepm.assignment.individual.dto.SearchDto;
+import at.ac.tuwien.sepm.assignment.individual.dto.HorseSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -60,7 +60,7 @@ public interface HorseService {
      * @param searchString
      * @return
      */
-    List<Horse> searchParent(java.sql.Date dateOfBirth, Sex parentSex, String searchString);
+    List<Horse> searchParent(LocalDate dateOfBirth, Sex parentSex, String searchString);
 
     /**
      * todo add doc
@@ -71,8 +71,8 @@ public interface HorseService {
 
     /**
      * todo add doc
-     * @param searchDto
+     * @param horseSearchDto
      * @return
      */
-    List<Horse> searchHorse(SearchDto searchDto);
+    List<Horse> searchHorse(HorseSearchDto horseSearchDto);
 }

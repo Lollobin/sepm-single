@@ -1,8 +1,9 @@
 package at.ac.tuwien.sepm.assignment.individual.entity;
 
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  * Class for horse entities
@@ -12,7 +13,8 @@ public class Horse {
     private Long id;
     private String name;
     private String description;
-    private java.sql.Date dateOfBirth;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
     private Sex sex;
     private Owner owner;
     private Horse father;
@@ -42,11 +44,11 @@ public class Horse {
         this.description = description;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
