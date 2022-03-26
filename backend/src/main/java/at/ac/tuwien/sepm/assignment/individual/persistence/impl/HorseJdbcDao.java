@@ -138,16 +138,20 @@ public class HorseJdbcDao implements HorseDao {
                 + "' parents of Horse(" + parentSearchDto.dateOfBirth()
                 + "): " + parentSearchDto.searchString());
 
+        Object[] parameters = new Object[]{
+                "%" + parentSearchDto.searchString().toLowerCase() + "%",
+                parentSearchDto.parentSex().toString(),
+                parentSearchDto.dateOfBirth(),
+                parentSearchDto.dateOfBirth()
+        };
+
         final String sql = SQL_SELECT_ALL_JOINED
                 + " WHERE LOWER(horse.name) LIKE ?"
                 + " AND horse.sex = ?"
-                + " AND horse.dateOfBirth < ?"
+                + " AND (? IS NULL OR horse.dateOfBirth < ?)"
                 + "LIMIT 5";
 
-        return jdbcTemplate.query(sql, this::mapRow,
-                "%" + parentSearchDto.searchString().toLowerCase() + "%",
-                parentSearchDto.parentSex().toString(),
-                parentSearchDto.dateOfBirth());
+        return jdbcTemplate.query(sql, this::mapRow, parameters);
     }
 
     @Override
