@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * Class for converting horse dto objects to entities and back
+ * Class for converting horse entity objects to DTOs.
  */
 @Component
 public class HorseMapper {
@@ -38,7 +38,7 @@ public class HorseMapper {
     /**
      * Returns a HorseDtoFull with the parameters of the given entity.
      *
-     * @param horse  a horse entity object
+     * @param horse a horse entity object
      * @return the corresponding HorseDtoFull
      */
     public HorseDtoFull entityToDtoFull(Horse horse) {
@@ -48,30 +48,4 @@ public class HorseMapper {
                 horse.getDateOfBirth(), horse.getSex(), horse.getOwner(),
                 entityToDto(horse.getFather()), entityToDto(horse.getMother()));
     }
-
-
-    /**
-     * Returns a Horse with the parameters of the given entity.
-     *
-     * @param horseDto a horse dto
-     * @return the corresponding Horse entity
-     */
-    /*
-    public Horse dtoToEntity(HorseDto horseDto) {
-        LOGGER.trace("Converting dto to entity: {}", horseDto);
-
-        Horse horse = new Horse();
-        horse.setId(horseDto.id());
-        horse.setName(horseDto.name());
-        horse.setDescription(horseDto.description());
-        horse.setDateOfBirth(horseDto.dateOfBirth());
-        horse.setSex(horseDto.sex());
-        if(horseDto.o== null)
-        horse.setOwnerId(horseDto.ownerId());
-        horse.setFatherId(horseDto.fatherId());
-        horse.setMotherId(horseDto.motherId());
-        return horse;
-    }
-
-     */
 }

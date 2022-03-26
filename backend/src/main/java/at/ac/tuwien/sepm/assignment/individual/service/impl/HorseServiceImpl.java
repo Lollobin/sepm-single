@@ -4,8 +4,6 @@ import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.ParentSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
-import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
-import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
 import at.ac.tuwien.sepm.assignment.individual.persistence.HorseDao;
 import at.ac.tuwien.sepm.assignment.individual.service.HorseService;
 import at.ac.tuwien.sepm.assignment.individual.validator.Validator;
@@ -13,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -22,12 +19,10 @@ public class HorseServiceImpl implements HorseService {
     private static final Logger LOGGER = LoggerFactory.getLogger(HorseServiceImpl.class);
     private final HorseDao horseDao;
     private final Validator validator;
-    private final HorseMapper horseMapper;
 
-    public HorseServiceImpl(HorseDao horseDao, Validator validator, HorseMapper horseMapper) {
+    public HorseServiceImpl(HorseDao horseDao, Validator validator) {
         this.horseDao = horseDao;
         this.validator = validator;
-        this.horseMapper = horseMapper;
     }
 
     @Override
@@ -46,9 +41,7 @@ public class HorseServiceImpl implements HorseService {
     @Override
     public Horse update(Long horseId, HorseDto horseDto) {
         LOGGER.info("Updating horse with ID {} to match {}", horseId, horseDto);
-        validator.validateHorse(horseDto);
-        validator.validateParentUpdate(horseId, horseDto);
-        //todo check if horse has children, then age and sex cannot always be changed
+        validator.validateHorseUpdate(horseId, horseDto);
         return horseDao.update(horseId, horseDto);
     }
 

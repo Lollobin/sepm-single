@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.individual.rest;
 
-import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
@@ -14,6 +13,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.stream.Stream;
 
+/**
+ * Endpoint for owners.
+ * Implements access and communication to rest layer regarding owners.
+ */
 @RestController
 @RequestMapping(OwnerEndpoint.BASE_URL)
 public class OwnerEndpoint {
@@ -60,6 +63,12 @@ public class OwnerEndpoint {
         }
     }
 
+    /**
+     * Returns owner with matching name.
+     *
+     * @param ownerSearchDto search criteria
+     * @return owner with matching name
+     */
     @GetMapping(params = {"name"})
     @ResponseStatus(HttpStatus.OK)
     public Stream<OwnerDto>searchOwner(OwnerSearchDto ownerSearchDto){

@@ -1,3 +1,8 @@
+/**
+ * Class for Horse DTOs.
+ * Contains all common properties.
+ * Owner and Parents are represented by IDs
+ */
 export interface Horse {
   id?: bigint;
   name: string;

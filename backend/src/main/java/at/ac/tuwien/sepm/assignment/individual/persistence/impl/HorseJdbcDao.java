@@ -17,7 +17,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -89,12 +88,6 @@ public class HorseJdbcDao implements HorseDao {
             stmt.setString(8, horseId.toString());
             return stmt;
         });
-
-        /*
-        Horse horse = MAPPER.dtoToEntity(horseDto);
-        horse.setId(horseId);
-         */
-
         return null;
     }
 
@@ -104,7 +97,6 @@ public class HorseJdbcDao implements HorseDao {
 
         final String sql = SQL_SELECT_ALL_JOINED
                 + " WHERE horse.id = ?";
-
 
         List<Horse> horses = jdbcTemplate.query(sql, this::mapRow, id);
         if (horses.isEmpty()) {
@@ -196,6 +188,14 @@ public class HorseJdbcDao implements HorseDao {
         return jdbcTemplate.query(sql, this::mapRow, parameters);
     }
 
+    /**
+     * Maps row from sql result onto horse entity.
+     *
+     * @param result ResultSet of the sql query
+     * @param rowNum Row to convert
+     * @return horse entity with values from ResultSet
+     * @throws SQLException if there is an error with the database
+     */
     private Horse mapRow(ResultSet result, int rowNum) throws SQLException {
         LOGGER.trace("Mapping row {} onto horse", rowNum);
 

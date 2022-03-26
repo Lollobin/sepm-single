@@ -1,3 +1,7 @@
+/**
+ * Class for message DTOs.
+ * Only used in frontend.
+ */
 export interface Message {
   text: string;
   level: Level;

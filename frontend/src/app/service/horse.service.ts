@@ -1,9 +1,9 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {debounceTime, distinctUntilChanged, Observable, of, switchMap} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {environment} from 'src/environments/environment';
 import {Horse} from '../dto/horse';
-import {catchError, map, tap} from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 import {HorseParents} from "../dto/horseParents";
 
 const baseUri = environment.backendUrl + '/horses';
@@ -11,26 +11,29 @@ const baseUri = environment.backendUrl + '/horses';
 @Injectable({
   providedIn: 'root'
 })
+
+/**
+ * Service to access remote horse data.
+ */
 export class HorseService {
 
-  constructor(
-    private http: HttpClient
-  ) {
+  constructor(private http: HttpClient) {
   }
 
   /**
-   * Get all horses stored in the system
+   * Get all horses stored in the system.
    *
-   * @return observable list of found horses.
+   * @return observable list of found horses
    */
   getAll(): Observable<Horse[]> {
     return this.http.get<Horse[]>(baseUri);
   }
 
   /**
-   * Get horse with id from the database
+   * Get horse with id from the database.
    *
-   * @param id id of horse to be fetched.
+   * @param id id of horse to be fetched
+   * @get observable of horse with id
    */
   getOneById(id: bigint): Observable<HorseParents> {
     return this.http.get<HorseParents>(baseUri + "/" + id);
@@ -39,7 +42,7 @@ export class HorseService {
   /**
    * Sends horse to server to be created.
    *
-   * @param horse data of horse to be created.
+   * @param horse data of horse to be created
    */
   create(horse: Horse): Observable<Horse> {
     return this.http.post<Horse>(baseUri, horse);
@@ -56,10 +59,12 @@ export class HorseService {
   }
 
   /**
-   * todo add doc
-   * @param dateOfBirth
-   * @param parentSex
-   * @param searchString
+   * Returns possible parent matches for a horse.
+   *
+   * @param dateOfBirth birth-date of child
+   * @param parentSex sex of the parent
+   * @param searchString name fragment of the parent
+   * @return all possible parents
    */
   searchParent(dateOfBirth: Date, parentSex: string, searchString: string): Observable<Horse[]> {
     let queryParams = new HttpParams()
@@ -71,6 +76,16 @@ export class HorseService {
       .pipe(catchError(this.handleError<Horse[]>('searchParent', [])));
   }
 
+  /**
+   * Returns all horses matching the search criteria
+   *
+   * @param name
+   * @param description
+   * @param dateOfBirth
+   * @param sex
+   * @param owner
+   * @return observable of all matching parents
+   */
   searchHorse(name: string, description: string, dateOfBirth: Date, sex: string, owner: string): Observable<HorseParents[]> {
     let queryParams = new HttpParams();
     if (name != null && name != '')
@@ -89,13 +104,13 @@ export class HorseService {
   }
 
   /**
-   * todo add doc
-   * @param id
+   * Deletes horse with id.
+   *
+   * @param id id of horse to be deleted
    */
   delete(id: bigint): Observable<void> {
     return this.http.delete<void>(baseUri + "/" + id);
   }
-
 
   /**
    * Handle Http operation that failed.

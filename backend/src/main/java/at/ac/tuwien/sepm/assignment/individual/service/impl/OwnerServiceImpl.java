@@ -3,7 +3,6 @@ package at.ac.tuwien.sepm.assignment.individual.service.impl;
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
-import at.ac.tuwien.sepm.assignment.individual.mapper.OwnerMapper;
 import at.ac.tuwien.sepm.assignment.individual.persistence.OwnerDao;
 import at.ac.tuwien.sepm.assignment.individual.service.OwnerService;
 import at.ac.tuwien.sepm.assignment.individual.validator.Validator;
@@ -20,12 +19,10 @@ public class OwnerServiceImpl implements OwnerService {
 
     private final OwnerDao ownerDao;
     private final Validator validator;
-    private final OwnerMapper ownerMapper;
 
-    public OwnerServiceImpl(OwnerDao ownerDao, Validator validator, OwnerMapper ownerMapper) {
+    public OwnerServiceImpl(OwnerDao ownerDao, Validator validator) {
         this.ownerDao = ownerDao;
         this.validator = validator;
-        this.ownerMapper = ownerMapper;
     }
 
     @Override

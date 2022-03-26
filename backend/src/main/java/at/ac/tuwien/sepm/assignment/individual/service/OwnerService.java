@@ -6,6 +6,9 @@ import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
 
 import java.util.List;
 
+/**
+ * Service for working with owners.
+ */
 public interface OwnerService {
 
     /**
@@ -14,7 +17,6 @@ public interface OwnerService {
      * @return list of all stored owners
      */
     List<Owner> allOwners();
-
 
     /**
      * Validates ownerDto and saves it.

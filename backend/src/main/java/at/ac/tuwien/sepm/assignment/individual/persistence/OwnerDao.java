@@ -34,12 +34,4 @@ public interface OwnerDao {
      * @return possible owner matches
      */
     List<Owner> searchOwner(OwnerSearchDto ownerSearchDto);
-
-    /**
-     * Get an owner with the given id from the persistent data store.
-     *
-     * @param id id of the owner to return
-     * @return owner with the given id
-     */
-    Owner getOneById(Long id);
 }

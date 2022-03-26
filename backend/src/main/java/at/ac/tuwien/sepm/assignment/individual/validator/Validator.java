@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * Class to validate HorseDto.
- * Checks parameters for errors caused by wrong user input.
+ * Class to validate user input.
+ * Checks parameters for errors.
  * <p>
  * Throws ValidationException if error is detected.
  */
@@ -25,18 +25,17 @@ import java.util.regex.Pattern;
 public class Validator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Validator.class);
-    private final HorseDao dao;
+    private final HorseDao horseDao;
 
-    public Validator(HorseDao dao) {
-        this.dao = dao;
+    public Validator(HorseDao horseDao) {
+        this.horseDao = horseDao;
     }
 
     /**
-     * Validates all relevant parameters of a HorseDto.
+     * Validates all relevant parameters of a new HorseDto.
      * Throws ValidationException if error is detected.
      *
      * @param horseDto object to be validated
-     * @return true if all tests succeed
      */
     public void validateHorse(HorseDto horseDto) {
         LOGGER.trace("Validating horse {}", horseDto);
@@ -47,17 +46,29 @@ public class Validator {
         validateParents(horseDto.fatherId(), horseDto.motherId(), horseDto.dateOfBirth());
     }
 
+    /**
+     * Validates all relevant parameters of a new OwnerDto.
+     * Throws ValidationException if error is detected.
+     *
+     * @param ownerDto object to be validated
+     */
     public void validateOwner(OwnerDto ownerDto) {
         LOGGER.trace("Validating owner {}", ownerDto);
         validateName(ownerDto.firstName());
         validateName(ownerDto.lastName());
         validateEmail(ownerDto.email());
-
     }
 
-    public void validateParentUpdate(Long id, HorseDto horseDto) {
-        Horse oldHorse = dao.getOneById(id);
-        List<Horse> children = dao.getAllChildren(id);
+    /**
+     * Validates HorseDto to be updated.
+     *
+     * @param id id of horse to be updated
+     * @param horseDto new data for horse
+     */
+    public void validateHorseUpdate(Long id, HorseDto horseDto) {
+        validateHorse(horseDto);
+        Horse oldHorse = horseDao.getOneById(id);
+        List<Horse> children = horseDao.getAllChildren(id);
 
         if (children.isEmpty())
             return;
@@ -74,7 +85,7 @@ public class Validator {
     private void validateName(String name) {
         LOGGER.trace("Validating name '{}'", name);
 
-        if(name==null)
+        if (name == null)
             throw new ValidationException("Name cannot be null");
 
         if (name.trim().length() == 0)
@@ -92,7 +103,7 @@ public class Validator {
     }
 
     private void validateEmail(String email) {
-        if(email== null || email.equals(""))
+        if (email == null || email.equals(""))
             return;
 
         String regexPattern = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
@@ -109,7 +120,7 @@ public class Validator {
 
     private void validateParents(Long fatherId, Long motherId, LocalDate dateOfBirth) {
         if (fatherId != null) {
-            Horse father = dao.getOneById(fatherId);
+            Horse father = horseDao.getOneById(fatherId);
             if (father.getSex() == Sex.female)
                 throw new ValidationException("Father has to be male");
             if (father.getDateOfBirth().isAfter(dateOfBirth))
@@ -117,7 +128,7 @@ public class Validator {
         }
 
         if (motherId != null) {
-            Horse mother = dao.getOneById(motherId);
+            Horse mother = horseDao.getOneById(motherId);
             if (mother.getSex() == Sex.male)
                 throw new ValidationException("Mother has to be female");
             if (mother.getDateOfBirth().isAfter(dateOfBirth))

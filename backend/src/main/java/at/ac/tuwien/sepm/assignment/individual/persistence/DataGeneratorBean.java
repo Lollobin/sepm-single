@@ -22,7 +22,6 @@ public class DataGeneratorBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final DataSource dataSource;
 
-
     public DataGeneratorBean(DataSource dataSource) {
         this.dataSource = dataSource;
     }

@@ -4,9 +4,7 @@ import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.ParentSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
-import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -32,7 +30,7 @@ public interface HorseService {
      * Validates parameters of horseDto and checks if horse with "horseId" exists.
      * Forwards it to persistence layer for updating
      *
-     * @param horseId ID of horse to be updated
+     * @param horseId  ID of horse to be updated
      * @param horseDto new data for horse
      * @return updated horse
      */
@@ -45,7 +43,6 @@ public interface HorseService {
      * @return horse with id.
      */
     Horse getOneById(Long id);
-
 
     /**
      * Delete horse with id in database
@@ -63,16 +60,18 @@ public interface HorseService {
     List<Horse> searchParent(ParentSearchDto parentSearchDto);
 
     /**
-     * todo add doc
-     * @param id
-     * @return
+     * Returns all children of horse with id.
+     *
+     * @param id id of parent
+     * @return children of horse
      */
     List<Horse> getAllChildren(Long id);
 
     /**
-     * todo add doc
-     * @param horseSearchDto
-     * @return
+     * Returns all horses that match the search parameters.
+     *
+     * @param horseSearchDto parameters to search horse (name, description, date of birth, sex, name of owner)
+     * @return all matching horses
      */
     List<Horse> searchHorse(HorseSearchDto horseSearchDto);
 }

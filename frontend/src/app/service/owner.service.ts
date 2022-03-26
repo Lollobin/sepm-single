@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable, of, tap} from "rxjs";
+import {Observable, of} from "rxjs";
 import {Owner} from "../dto/owner";
 import {catchError} from "rxjs/operators";
 
@@ -10,11 +10,20 @@ const baseUri = environment.backendUrl + '/owners';
 @Injectable({
   providedIn: 'root'
 })
+
+/**
+ * Service to access remote owner data.
+ */
 export class OwnerService {
 
   constructor(private http: HttpClient) {
   }
 
+  /**
+   * Get all owners stored in the system.
+   *
+   * @return observable list of all owners
+   */
   getAll(): Observable<Owner[]> {
     return this.http.get<Owner[]>(baseUri);
   }
@@ -33,6 +42,7 @@ export class OwnerService {
    * Matches based on name.
    *
    * @param searchString string to match owner names with
+   * @return observable of all matching owners
    */
   searchOwner(searchString: string): Observable<Owner[]> {
     let queryParams = new HttpParams()

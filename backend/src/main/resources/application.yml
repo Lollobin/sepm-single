@@ -1,7 +1,7 @@
 logging:
   level:
     root: INFO
-    at.ac.tuwien.sepm.assignment.individual: DEBUG
+    at:ac:tuwien:sepm: DEBUG
   file:
     name: ./log/wendys-friends.log
 spring:

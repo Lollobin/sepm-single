@@ -4,10 +4,13 @@ import {Message} from "../dto/message";
 @Injectable({
   providedIn: 'root',
 })
+
+/**
+ * Service for handling messages to the user.
+ */
 export class MessageService {
   currentMessage: Message = null;
   messages: Message[] = [];
-
 
   info(message: string) {
     let newMessage: Message={
@@ -38,7 +41,6 @@ export class MessageService {
     this.currentMessage = newMessage;
     this.messages.push(newMessage);
   }
-
 
   error(message: string) {
     let newMessage: Message={

@@ -70,13 +70,14 @@ public class OwnerJdbcDao implements OwnerDao {
                 "%" + ownerSearchDto.name().toLowerCase() + "%");
     }
 
-    @Override
-    public Owner getOneById(Long id) {
-        return null;
-    }
-
-
-
+    /**
+     * Maps row from sql result onto owner entity.
+     *
+     * @param result ResultSet of the sql query
+     * @param rowNum Row to convert
+     * @return owner entity with values from ResultSet
+     * @throws SQLException if there is an error with the database
+     */
     private Owner mapRow(ResultSet result, int rowNum) throws SQLException {
         LOGGER.trace("Mapping row {} onto owner", rowNum);
 

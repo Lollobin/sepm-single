@@ -7,8 +7,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 /**
- * Class for Horse DTOs including the parents as DTOs
- * Contains all common properties
+ * Class for Horse DTOs.
+ * Contains all common properties.
+ * Owner and Parents are contained as DTOs
  */
 public record HorseDtoFull(Long id,
                            String name,
