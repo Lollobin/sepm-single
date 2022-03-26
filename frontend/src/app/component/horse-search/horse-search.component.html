@@ -62,7 +62,7 @@
       <td>{{horse.description}}</td>
       <td>{{horse.dateOfBirth}}</td>
       <td>{{horse.sex}}</td>
-      <td>{{horse.owner.firstName + " " + horse.owner.lastName}}</td>
+      <td><span *ngIf="horse.owner">{{horse.owner.firstName + " " + horse.owner.lastName}}</span></td>
       <td>
         <button class="btn btn-dark me-1" id="{{'details'+horse.id}}" [routerLink]="['/horses', horse.id]">
           Details

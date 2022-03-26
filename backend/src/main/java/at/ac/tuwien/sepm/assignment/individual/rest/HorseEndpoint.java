@@ -111,7 +111,7 @@ public class HorseEndpoint {
             return service.save(horseDto);
         } catch (ValidationException e) {
             LOGGER.error(e.toString());
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Parameters are not valid", e);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
     }
 
@@ -131,7 +131,7 @@ public class HorseEndpoint {
             return mapper.entityToDto(service.update(horseId, horseDto));
         } catch (ValidationException e) {
             LOGGER.error(e.toString());
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Parameters are not valid", e);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (NotFoundException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error during reading horse", e);

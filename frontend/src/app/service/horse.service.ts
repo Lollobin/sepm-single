@@ -4,9 +4,7 @@ import {debounceTime, distinctUntilChanged, Observable, of, switchMap} from 'rxj
 import {environment} from 'src/environments/environment';
 import {Horse} from '../dto/horse';
 import {catchError, map, tap} from 'rxjs/operators';
-import {MessageService} from "./message.service";
 import {HorseParents} from "../dto/horseParents";
-import {Owner} from "../dto/owner";
 
 const baseUri = environment.backendUrl + '/horses';
 
@@ -16,8 +14,7 @@ const baseUri = environment.backendUrl + '/horses';
 export class HorseService {
 
   constructor(
-    private http: HttpClient,
-    private messageService: MessageService
+    private http: HttpClient
   ) {
   }
 
@@ -27,10 +24,7 @@ export class HorseService {
    * @return observable list of found horses.
    */
   getAll(): Observable<Horse[]> {
-    return this.http.get<Horse[]>(baseUri)
-      .pipe(
-        tap(_ => this.log('fetched horses')),
-        catchError(this.handleError<Horse[]>('getAll', [])));
+    return this.http.get<Horse[]>(baseUri);
   }
 
   /**
@@ -39,11 +33,7 @@ export class HorseService {
    * @param id id of horse to be fetched.
    */
   getOneById(id: bigint): Observable<HorseParents> {
-    return this.http.get<HorseParents>(baseUri + "/" + id)
-      .pipe(
-        tap(_ => this.log('fetching horse with id ' + id)),
-        catchError(this.handleError<HorseParents>('getOneById'))
-      )
+    return this.http.get<HorseParents>(baseUri + "/" + id);
   }
 
   /**
@@ -52,8 +42,7 @@ export class HorseService {
    * @param horse data of horse to be created.
    */
   create(horse: Horse): Observable<Horse> {
-    return this.http.post<Horse>(baseUri, horse)
-      .pipe(catchError(this.handleError<Horse>('create')));
+    return this.http.post<Horse>(baseUri, horse);
   }
 
   /**
@@ -63,8 +52,7 @@ export class HorseService {
    * @param horse new data for horse.
    */
   edit(id: bigint, horse: Horse): Observable<Horse> {
-    return this.http.put<Horse>(baseUri + "/" + id, horse)
-      .pipe(catchError(this.handleError<Horse>('edit')))
+    return this.http.put<Horse>(baseUri + "/" + id, horse);
   }
 
   /**
@@ -74,8 +62,6 @@ export class HorseService {
    * @param searchString
    */
   searchParent(dateOfBirth: Date, parentSex: string, searchString: string): Observable<Horse[]> {
-    this.log("searchString: " + searchString)
-
     let queryParams = new HttpParams()
       .append("dateOfBirth", dateOfBirth.toString())
       .append("parentSex", parentSex)
@@ -98,8 +84,6 @@ export class HorseService {
     if (owner != null && owner != '')
       queryParams = queryParams.append('owner', owner);
 
-    this.log("params " + queryParams.toString())
-
     return this.http.get<HorseParents[]>(baseUri + "/search", {params: queryParams})
       .pipe(catchError(this.handleError<HorseParents[]>('searchHorse', [])));
   }
@@ -109,9 +93,7 @@ export class HorseService {
    * @param id
    */
   delete(id: bigint): Observable<void> {
-    this.log("deleting horse with id " + id)
-    return this.http.delete<void>(baseUri + "/" + id)
-      .pipe(catchError(this.handleError<void>('delete')));
+    return this.http.delete<void>(baseUri + "/" + id);
   }
 
 
@@ -124,20 +106,7 @@ export class HorseService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
-
-      switch (error.status) {
-        case 422:
-          this.log('Submit failed because of invalid input.')
-          break;
-        default:
-          this.log(`${operation} failed: ${error.message}`);
-          return of(result as T); // Let the app keep running by returning an empty result.
-      }
+      return of(result as T);
     };
-  }
-
-  log(message: string) {
-    console.log(message)
-    this.messageService.add(`${message}`);
   }
 }

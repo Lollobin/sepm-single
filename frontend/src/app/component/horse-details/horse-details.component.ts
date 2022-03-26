@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {HorseService} from "../../service/horse.service";
 import {HorseParents} from "../../dto/horseParents";
 import {Location} from "@angular/common";
+import {MessageService} from "../../service/message.service";
 
 @Component({
   selector: 'app-horse-details',
@@ -19,7 +20,9 @@ export class HorseDetailsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private horseService: HorseService,
     private location: Location,
-  ) { }
+    private messageService: MessageService
+  ) {
+  }
 
   ngOnInit(): void {
     this.sub = this.activatedRoute.paramMap.subscribe(params => {
@@ -29,9 +32,15 @@ export class HorseDetailsComponent implements OnInit {
     })
   }
 
-  getHorse(): void{
-    this.horseService.getOneById(this.id).subscribe(horse=>{
-      this.horse =horse;
+  getHorse(): void {
+    this.horseService.getOneById(this.id).subscribe({
+      next: horse => {
+        this.messageService.success('Received horse details');
+        this.horse = horse;
+      },
+      error: error => {
+        this.messageService.error('Error fetching horse details')
+      }
     })
   }
 

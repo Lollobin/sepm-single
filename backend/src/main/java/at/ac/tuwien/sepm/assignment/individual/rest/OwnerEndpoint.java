@@ -56,7 +56,7 @@ public class OwnerEndpoint {
             return ownerMapper.entityToDto(ownerService.save(ownerDto));
         } catch (ValidationException e) {
             LOGGER.error(e.toString());
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Parameters are not valid", e);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
     }
 

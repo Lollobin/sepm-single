@@ -1,16 +1,57 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
+import {Message} from "../dto/message";
 
 @Injectable({
   providedIn: 'root',
 })
 export class MessageService {
-  messages: string[] = [];
+  currentMessage: Message = null;
+  messages: Message[] = [];
 
-  add(message: string) {
-    this.messages.push(message);
+
+  info(message: string) {
+    let newMessage: Message={
+      text: message,
+      level: 'info'
+    }
+
+    this.currentMessage = newMessage;
+    this.messages.push(newMessage);
+  }
+
+  success(message: string) {
+    let newMessage: Message={
+      text: message,
+      level: 'success'
+    }
+
+    this.currentMessage = newMessage;
+    this.messages.push(newMessage);
+  }
+
+  warning(message: string) {
+    let newMessage: Message={
+      text: message,
+      level: 'warning'
+    }
+
+    this.currentMessage = newMessage;
+    this.messages.push(newMessage);
+  }
+
+
+  error(message: string) {
+    let newMessage: Message={
+      text: message,
+      level: 'error'
+    }
+
+    this.currentMessage = newMessage;
+    this.messages.push(newMessage);
   }
 
   clear() {
+    this.currentMessage = null;
     this.messages = [];
   }
 }

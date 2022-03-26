@@ -3,6 +3,7 @@ import {HorseService} from "../../service/horse.service";
 import {Location} from "@angular/common";
 import {FormBuilder} from "@angular/forms";
 import {HorseParents} from "../../dto/horseParents";
+import {MessageService} from "../../service/message.service";
 
 @Component({
   selector: 'app-horse-search',
@@ -24,7 +25,8 @@ export class HorseSearchComponent implements OnInit {
   constructor(
     private horseService: HorseService,
     private location: Location,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private messageService: MessageService
   ) {
   }
 
@@ -42,6 +44,14 @@ export class HorseSearchComponent implements OnInit {
       .subscribe({
         next: data => {
           this.results = data;
+        },
+        error: error => {
+          console.error('Error fetching horses', error.message);
+          this.messageService.error('Error fetching horses')
+        },
+        complete: () =>{
+          console.log('received horses');
+          this.messageService.success('Successfully received horses');
         }
       })
 

@@ -3,6 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
 import {HorseService} from "../../service/horse.service";
 import {Horse} from "../../dto/horse";
+import {MessageService} from "../../service/message.service";
 
 @Component({
   selector: 'app-horse-delete',
@@ -18,7 +19,8 @@ export class HorseDeleteComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private location: Location,
-    private horseService: HorseService
+    private horseService: HorseService,
+    private messageService: MessageService
   ) {
   }
 
@@ -28,7 +30,7 @@ export class HorseDeleteComponent implements OnInit {
       this.id = params.get('id');
     })
 
-    this.horseService.getOneById(this.id).subscribe(horse =>{
+    this.horseService.getOneById(this.id).subscribe(horse => {
       this.horse = horse;
     })
   }
@@ -37,8 +39,10 @@ export class HorseDeleteComponent implements OnInit {
     this.location.back();
   }
 
-  delete(): void{
-    this.horseService.delete(this.id).subscribe();
-    this.goBack();
+  delete(): void {
+    this.horseService.delete(this.id).subscribe({
+      error: (e) => this.messageService.error("Error deleting horse"),
+      complete: () => this.goBack()
+    });
   }
 }

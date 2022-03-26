@@ -8,6 +8,7 @@ import {debounceTime, distinctUntilChanged, Observable, of, switchMap} from "rxj
 import {catchError} from "rxjs/operators";
 import {Owner} from "../../dto/owner";
 import {OwnerService} from "../../service/owner.service";
+import {MessageService} from "../../service/message.service";
 
 @Component({
   selector: 'app-horse-create',
@@ -56,7 +57,8 @@ export class HorseCreateComponent implements OnInit {
     private location: Location,
     private horseService: HorseService,
     private ownerService: OwnerService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private messageService: MessageService
   ) {
   }
 
@@ -81,10 +83,13 @@ export class HorseCreateComponent implements OnInit {
     };
 
     this.horseService.create(horse)
-      .subscribe({next: (horse) => console.log(horse)})
-
-    //console.info('The horse has been submitted', this.horseForm.value);
-    this.horseForm.reset();
+      .subscribe({
+        error: (e) => this.messageService.error(e.error.message),
+        complete: () => {
+          this.messageService.success("Successfully created horse");
+          this.horseForm.reset();
+        }
+      });
   }
 
   get name() {

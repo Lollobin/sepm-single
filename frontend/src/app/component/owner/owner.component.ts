@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {OwnerService} from "../../service/owner.service";
 import {Owner} from "../../dto/owner";
+import {MessageService} from "../../service/message.service";
 
 @Component({
   selector: 'app-owner',
@@ -11,7 +12,8 @@ export class OwnerComponent implements OnInit {
   owners: Owner[];
 
   constructor(
-    private service: OwnerService
+    private service: OwnerService,
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -21,11 +23,12 @@ export class OwnerComponent implements OnInit {
   reloadOwners(){
     this.service.getAll().subscribe({
       next: data =>{
-        this.service.log('received owners');
+        this.messageService.success('Successfully received owners');
         this.owners=data;
       },
       error: error=>{
-        this.service.log('Error fetching owners')
+        console.error('Error fetching owners', error.message);
+        this.messageService.error('Error fetching owners')
     }
     })
   }

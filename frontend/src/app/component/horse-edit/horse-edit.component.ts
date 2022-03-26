@@ -9,6 +9,7 @@ import {catchError} from "rxjs/operators";
 import {HorseParents} from "../../dto/horseParents";
 import {Owner} from "../../dto/owner";
 import {OwnerService} from "../../service/owner.service";
+import {MessageService} from "../../service/message.service";
 
 @Component({
   selector: 'app-horse-edit',
@@ -51,7 +52,8 @@ export class HorseEditComponent implements OnInit {
     private location: Location,
     private horseService: HorseService,
     private formBuilder: FormBuilder,
-    private ownerService: OwnerService
+    private ownerService: OwnerService,
+    private messageService: MessageService
   ) {
   }
 
@@ -87,7 +89,13 @@ export class HorseEditComponent implements OnInit {
       motherId: value.mother == null ? null : value.mother.id
     }
 
-    this.horseService.edit(this.id, horse).subscribe({next: (horse) => console.log(horse)})
+    this.horseService.edit(this.id, horse).subscribe({
+      next: (horse) => console.log(horse),
+      error: (e) => this.messageService.error(e.error.message),
+      complete: () => {
+        this.messageService.success("Successfully saved changes");
+      }
+    })
   }
 
   goBack(): void {

@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {MessageService} from "./message.service";
 import {Observable, of, tap} from "rxjs";
 import {Owner} from "../dto/owner";
 import {catchError} from "rxjs/operators";
@@ -13,18 +12,11 @@ const baseUri = environment.backendUrl + '/owners';
 })
 export class OwnerService {
 
-  constructor(
-    private http: HttpClient,
-    private messageService: MessageService
-  ) {
+  constructor(private http: HttpClient) {
   }
 
   getAll(): Observable<Owner[]> {
-    return this.http.get<Owner[]>(baseUri)
-      .pipe(
-        tap(_ => this.log('fetched owners')),
-        catchError(this.handleError<Owner[]>('getAll', []))
-      )
+    return this.http.get<Owner[]>(baseUri);
   }
 
   /**
@@ -32,9 +24,8 @@ export class OwnerService {
    *
    * @param owner data of owner to be created
    */
-  create(owner: Owner): Observable<Owner>{
-    return this.http.post<Owner>(baseUri,owner)
-      .pipe(catchError(this.handleError<Owner>('create')))
+  create(owner: Owner): Observable<Owner> {
+    return this.http.post<Owner>(baseUri, owner);
   }
 
   /**
@@ -43,14 +34,13 @@ export class OwnerService {
    *
    * @param searchString string to match owner names with
    */
-  searchOwner(searchString: string):Observable<Owner[]>{
+  searchOwner(searchString: string): Observable<Owner[]> {
     let queryParams = new HttpParams()
-      .append("name",searchString);
+      .append("name", searchString);
 
-    return this.http.get<Owner[]>(baseUri,{params: queryParams})
-      .pipe(catchError(this.handleError<Owner[]>('searchOwner',[])))
+    return this.http.get<Owner[]>(baseUri, {params: queryParams})
+      .pipe(catchError(this.handleError<Owner[]>('searchOwner', [])))
   }
-
 
   /**
    * Handle Http operation that failed.
@@ -61,20 +51,8 @@ export class OwnerService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
+      return of(result as T);
+    }
+  };
 
-      switch (error.status) {
-        case 422:
-          this.log('Submit failed because of invalid input.')
-          break;
-        default:
-          this.log(`${operation} failed: ${error.message}`);
-          return of(result as T); // Let the app keep running by returning an empty result.
-      }
-    };
-  }
-
-  log(message: string) {
-    console.log(message)
-    this.messageService.add(`${message}`);
-  }
 }
