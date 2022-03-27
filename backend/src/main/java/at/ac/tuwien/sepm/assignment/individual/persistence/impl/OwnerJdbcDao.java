@@ -37,12 +37,15 @@ public class OwnerJdbcDao implements OwnerDao {
 
     @Override
     public List<Owner> getAll() {
-        LOGGER.info("Getting all owners");
+        LOGGER.trace("Getting all owners");
+
         return jdbcTemplate.query(SQL_SELECT_ALL, this::mapRow);
     }
 
     @Override
     public Owner save(OwnerDto ownerDto) {
+        LOGGER.trace("Saving {}", ownerDto);
+
         final String sql = "INSERT INTO " + TABLE_NAME
                 + " (firstName, lastName, email)"
                 + " VALUES (?,?,?)";
@@ -63,7 +66,7 @@ public class OwnerJdbcDao implements OwnerDao {
 
     @Override
     public List<Owner> searchOwner(OwnerSearchDto ownerSearchDto) {
-        LOGGER.info("Getting possible owners matching '{}'", ownerSearchDto.name());
+        LOGGER.trace("Getting possible owners matching '{}'", ownerSearchDto.name());
         final String sql = SQL_SELECT_ALL
                 + " WHERE LOWER(CONCAT(firstName, lastName)) like ?"
                 + " LIMIT 5";
