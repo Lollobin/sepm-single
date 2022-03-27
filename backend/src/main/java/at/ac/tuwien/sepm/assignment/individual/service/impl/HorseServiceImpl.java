@@ -60,7 +60,6 @@ public class HorseServiceImpl implements HorseService {
     @Override
     public List<Horse> getAllChildren(Long id) {
         LOGGER.trace("Get all children of horse with id {}", id);
-        //todo check if horse with id exists
         return horseDao.getAllChildren(id);
     }
 

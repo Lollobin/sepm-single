@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.individual.persistence;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerSearchDto;
+import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
 
 import java.util.List;
@@ -34,4 +35,13 @@ public interface OwnerDao {
      * @return possible owner matches
      */
     List<Owner> searchOwner(OwnerSearchDto ownerSearchDto);
+
+    /**
+     * Get owner with the given id from the persistent data store.
+     *
+     * @param id id of the owner to return
+     * @return owner with the given id
+     */
+    Owner getOneById(Long id);
+
 }

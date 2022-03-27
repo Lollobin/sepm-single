@@ -46,8 +46,7 @@ public class HorseEndpoint {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public Stream<HorseDtoFull> searchHorse(HorseSearchDto horseSearchDto) {
-        LOGGER.info("GET " + BASE_URL + "/search");
-        LOGGER.info(horseSearchDto.name());
+        LOGGER.info("GET " + BASE_URL);
 
         return service.searchHorse(horseSearchDto).stream()
                 .map(mapper::entityToDtoFull);
@@ -165,6 +164,7 @@ public class HorseEndpoint {
     @GetMapping(params = {"dateOfBirth", "parentSex", "searchString"})
     public Stream<HorseDto> searchParent(ParentSearchDto parentSearchDto) {
         LOGGER.info("GET " + BASE_URL + "(searchParent)");
+
         return service.searchParent(parentSearchDto).stream()
                 .map(mapper::entityToDto);
     }

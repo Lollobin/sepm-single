@@ -2,7 +2,9 @@ package at.ac.tuwien.sepm.assignment.individual.persistence.impl;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerSearchDto;
+import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
+import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
 import at.ac.tuwien.sepm.assignment.individual.mapper.OwnerMapper;
 import at.ac.tuwien.sepm.assignment.individual.persistence.OwnerDao;
 import org.slf4j.Logger;
@@ -68,6 +70,21 @@ public class OwnerJdbcDao implements OwnerDao {
 
         return jdbcTemplate.query(sql, this::mapRow,
                 "%" + ownerSearchDto.name().toLowerCase() + "%");
+    }
+
+    @Override
+    public Owner getOneById(Long id) {
+        LOGGER.trace("Get horse with id {}", id);
+
+        final String sql = SQL_SELECT_ALL
+                + " WHERE owner.id = ?";
+
+        List<Owner> owners = jdbcTemplate.query(sql, this::mapRow, id);
+        if (owners.isEmpty()) {
+            throw new NotFoundException(String.format("Could not find owner with id %s", id));
+        }
+
+        return owners.get(0);
     }
 
     /**
