@@ -1,14 +1,16 @@
 <div class="flex-horizontal full-width mt-3">
   <button class="btn btn-dark me-1" (click)="goBack()">&#8592;</button>
 </div>
+<div class="mt-3">
+  <h2>Do you really want to delete this horse?</h2>
+</div>
 
-<h2>Do you really want to delete this horse?</h2>
-<div *ngIf="horse">
+<div *ngIf="horse" class="mt-3">
   Name: {{horse.name}} <br>
   Description: {{horse.description}}<br>
   Date of birth: {{horse.dateOfBirth}}<br>
   Sex: {{horse.sex}}<br>
 </div>
-<div>
+<div class="mt-3">
   <button class="btn btn-primary" (click)="this.delete()">Delete</button>
 </div>

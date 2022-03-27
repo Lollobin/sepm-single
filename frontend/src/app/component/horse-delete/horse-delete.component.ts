@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Location} from "@angular/common";
 import {HorseService} from "../../service/horse.service";
 import {Horse} from "../../dto/horse";
@@ -20,7 +20,8 @@ export class HorseDeleteComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private location: Location,
     private horseService: HorseService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router
   ) {
   }
 
@@ -42,7 +43,7 @@ export class HorseDeleteComponent implements OnInit {
   delete(): void {
     this.horseService.delete(this.id).subscribe({
       error: (e) => this.messageService.error("Error deleting horse"),
-      complete: () => this.goBack()
+      complete: () => this.router.navigate(["/horses"])
     });
   }
 }
