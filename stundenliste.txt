@@ -1,5 +1,5 @@
 Benno Kossatz 11909390
-Gesamtsumme: -
+Gesamtsumme: 62h 20min
 
 Datum       Dauer       Bearbeitete Story
 09.03.22    01h30       15 (Erstellen der Projektumgebung und Git Repository)
@@ -24,3 +24,5 @@ Datum       Dauer       Bearbeitete Story
 26.03.22    02h30       4, 5, 11, 17, 24
 26.03.22    02h00       21
 26.03.22    02h30       11, 12, 21, 25
+27.03.22    02h15       11, 16, 20, 28, 30
+27.03.22    03h00       14, 29
