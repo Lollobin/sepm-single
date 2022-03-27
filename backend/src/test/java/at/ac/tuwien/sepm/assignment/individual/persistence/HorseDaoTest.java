@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.individual.persistence;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
+import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles({"test", "datagen"})
 // enable "test" spring profile during test execution in order to pick up configuration from application-test.yml
@@ -72,6 +74,11 @@ public class HorseDaoTest {
 
         assertThat(horses.get(0).getId()).isEqualTo(-5);
         assertThat(horses.get(1).getId()).isEqualTo(-3);
+    }
+
+    @Test
+    public void searchHorseWithNonExistentIdThrowsNotFoundException(){
+        assertThrows(NotFoundException.class, ()->horseDao.getOneById((long)0));
     }
 
 
