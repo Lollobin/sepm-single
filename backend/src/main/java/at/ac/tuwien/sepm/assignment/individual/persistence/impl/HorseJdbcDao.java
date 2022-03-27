@@ -7,7 +7,6 @@ import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
-import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
 import at.ac.tuwien.sepm.assignment.individual.persistence.HorseDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -29,7 +31,6 @@ public class HorseJdbcDao implements HorseDao {
             + " LEFT JOIN owner ON horse.ownerid = owner.id"
             + " LEFT JOIN horse AS father ON horse.fatherid = father.id"
             + " LEFT JOIN horse AS mother ON horse.motherid = mother.id";
-    private static final HorseMapper MAPPER = new HorseMapper();
 
     private final JdbcTemplate jdbcTemplate;
 

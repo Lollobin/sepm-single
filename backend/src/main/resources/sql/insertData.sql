@@ -11,7 +11,7 @@ VALUES (-1, 'Katja', 'Storbeck', 'katja.storbeck@gmail.com');
 INSERT INTO owner(id, firstName, lastName, email)
 VALUES (-2, 'Christel', 'Naujoks', '');
 INSERT INTO owner(id, firstName, lastName, email)
-VALUES (-3, 'Björn', 'Müssemeier', '');
+VALUES (-3, 'Bjoern', 'Muessemeier', '');
 INSERT INTO owner(id, firstName, lastName, email)
 VALUES (-4, 'Michaela', 'Goldenberg', 'michaela@goldenberg.de');
 INSERT INTO owner(id, firstName, lastName, email)

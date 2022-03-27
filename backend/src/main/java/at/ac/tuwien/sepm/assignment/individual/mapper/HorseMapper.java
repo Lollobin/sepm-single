@@ -14,6 +14,11 @@ import org.springframework.stereotype.Component;
 public class HorseMapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HorseMapper.class);
+    private final OwnerMapper ownerMapper;
+
+    public HorseMapper(OwnerMapper ownerMapper) {
+        this.ownerMapper = ownerMapper;
+    }
 
     /**
      * Returns a HorseDto with the parameters of the given entity.
@@ -45,7 +50,7 @@ public class HorseMapper {
         LOGGER.trace("Converting entity to dto: {}", horse);
 
         return new HorseDtoFull(horse.getId(), horse.getName(), horse.getDescription(),
-                horse.getDateOfBirth(), horse.getSex(), horse.getOwner(),
+                horse.getDateOfBirth(), horse.getSex(), ownerMapper.entityToDto(horse.getOwner()),
                 entityToDto(horse.getFather()), entityToDto(horse.getMother()));
     }
 }

@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.individual.dto;
 
-import at.ac.tuwien.sepm.assignment.individual.entity.Owner;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,7 +15,7 @@ public record HorseDtoFull(Long id,
                            String description,
                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateOfBirth,
                            Sex sex,
-                           Owner owner,
+                           OwnerDto owner,
                            HorseDto father,
                            HorseDto mother) {
 }
