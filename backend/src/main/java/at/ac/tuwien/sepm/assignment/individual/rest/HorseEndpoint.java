@@ -59,6 +59,7 @@ public class HorseEndpoint {
      * @return horse corresponding to the id
      */
     @GetMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public HorseDtoFull getOneById(@PathVariable("id") Long id) {
         LOGGER.info("GET " + BASE_URL + "/{}", id);
         try {
@@ -77,6 +78,7 @@ public class HorseEndpoint {
      * @return children of horse with id
      */
     @GetMapping("/{id}/children")
+    @ResponseStatus(HttpStatus.OK)
     public Stream<HorseDto> getAllChildren(@PathVariable("id") Long id) {
         LOGGER.info("GET" + BASE_URL + "/{}/children", id);
 
@@ -162,6 +164,7 @@ public class HorseEndpoint {
      * @return possible parents
      */
     @GetMapping(params = {"dateOfBirth", "parentSex", "searchString"})
+    @ResponseStatus(HttpStatus.OK)
     public Stream<HorseDto> searchParent(ParentSearchDto parentSearchDto) {
         LOGGER.info("GET " + BASE_URL + "(searchParent)");
 

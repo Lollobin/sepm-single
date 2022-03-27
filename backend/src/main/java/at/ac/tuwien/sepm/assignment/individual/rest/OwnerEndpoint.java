@@ -39,6 +39,7 @@ public class OwnerEndpoint {
      * @return all owners that are currently in the database
      */
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public Stream<OwnerDto> allOwners() {
         LOGGER.info("GET " + BASE_URL);
         return ownerService.allOwners().stream()
