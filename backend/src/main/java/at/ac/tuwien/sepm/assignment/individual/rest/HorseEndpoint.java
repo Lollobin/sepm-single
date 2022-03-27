@@ -4,7 +4,8 @@ import at.ac.tuwien.sepm.assignment.individual.dto.HorseDtoFull;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.ParentSearchDto;
 import at.ac.tuwien.sepm.assignment.individual.exception.NotFoundException;
-import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
+import at.ac.tuwien.sepm.assignment.individual.exception.ValidationConflictException;
+import at.ac.tuwien.sepm.assignment.individual.exception.ValidationProcessException;
 import at.ac.tuwien.sepm.assignment.individual.mapper.HorseMapper;
 import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.service.HorseService;
@@ -79,8 +80,14 @@ public class HorseEndpoint {
     @GetMapping("/{id}/children")
     public Stream<HorseDto> getAllChildren(@PathVariable("id") Long id) {
         LOGGER.info("GET" + BASE_URL + "/{}/children", id);
-        return service.getAllChildren(id).stream()
-                .map(mapper::entityToDto);
+
+        try{
+            return service.getAllChildren(id).stream()
+                    .map(mapper::entityToDto);
+        }catch (NotFoundException e) {
+            LOGGER.error(e.toString());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error during reading horse", e);
+        }
     }
 
     /**
@@ -96,7 +103,10 @@ public class HorseEndpoint {
 
         try {
             return service.save(horseDto);
-        } catch (ValidationException e) {
+        } catch (ValidationConflictException e){
+            LOGGER.error(e.toString());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (ValidationProcessException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
@@ -116,7 +126,10 @@ public class HorseEndpoint {
 
         try {
             return mapper.entityToDto(service.update(horseId, horseDto));
-        } catch (ValidationException e) {
+        } catch (ValidationConflictException e){
+            LOGGER.error(e.toString());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (ValidationProcessException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (NotFoundException e) {

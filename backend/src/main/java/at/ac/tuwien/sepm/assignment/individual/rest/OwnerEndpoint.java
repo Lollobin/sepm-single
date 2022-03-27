@@ -2,7 +2,8 @@ package at.ac.tuwien.sepm.assignment.individual.rest;
 
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerSearchDto;
-import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
+import at.ac.tuwien.sepm.assignment.individual.exception.ValidationConflictException;
+import at.ac.tuwien.sepm.assignment.individual.exception.ValidationProcessException;
 import at.ac.tuwien.sepm.assignment.individual.mapper.OwnerMapper;
 import at.ac.tuwien.sepm.assignment.individual.service.OwnerService;
 import org.slf4j.Logger;
@@ -57,7 +58,10 @@ public class OwnerEndpoint {
 
         try {
             return ownerMapper.entityToDto(ownerService.save(ownerDto));
-        } catch (ValidationException e) {
+        } catch (ValidationConflictException e){
+            LOGGER.error(e.toString());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (ValidationProcessException e) {
             LOGGER.error(e.toString());
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }

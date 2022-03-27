@@ -4,7 +4,7 @@ import at.ac.tuwien.sepm.assignment.individual.dto.HorseDto;
 import at.ac.tuwien.sepm.assignment.individual.dto.OwnerDto;
 import at.ac.tuwien.sepm.assignment.individual.entity.Horse;
 import at.ac.tuwien.sepm.assignment.individual.enums.Sex;
-import at.ac.tuwien.sepm.assignment.individual.exception.ValidationException;
+import at.ac.tuwien.sepm.assignment.individual.exception.ValidationProcessException;
 import at.ac.tuwien.sepm.assignment.individual.persistence.HorseDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * Class to validate user input.
  * Checks parameters for errors.
  * <p>
- * Throws ValidationException if error is detected.
+ * Throws ValidationProcessException or ValidationConflictException if error is detected.
  */
 @Component
 public class Validator {
@@ -32,7 +32,7 @@ public class Validator {
 
     /**
      * Validates all relevant parameters of a new HorseDto.
-     * Throws ValidationException if error is detected.
+     * Throws ValidationProcessException if error is detected.
      *
      * @param horseDto object to be validated
      */
@@ -47,7 +47,7 @@ public class Validator {
 
     /**
      * Validates all relevant parameters of a new OwnerDto.
-     * Throws ValidationException if error is detected.
+     * Throws ValidationProcessException if error is detected.
      *
      * @param ownerDto object to be validated
      */
@@ -75,32 +75,32 @@ public class Validator {
             return;
 
         if (oldHorse.getSex() != horseDto.sex())
-            throw new ValidationException("Cannot change sex of horse with children");
+            throw new ValidationProcessException("Cannot change sex of horse with children");
 
         if (oldHorse.getDateOfBirth() != horseDto.dateOfBirth())
             for (Horse child : children)
                 if (oldHorse.getDateOfBirth().isAfter(child.getDateOfBirth()))
-                    throw new ValidationException("Cannot change horse to be younger than its child");
+                    throw new ValidationProcessException("Cannot change horse to be younger than its child");
     }
 
     private void validateName(String name) {
         LOGGER.trace("Validating name: {}", name);
 
         if (name == null)
-            throw new ValidationException("Name cannot be null");
+            throw new ValidationProcessException("Name cannot be null");
 
         if (name.trim().length() == 0)
-            throw new ValidationException("Name cannot be empty or only spaces");
+            throw new ValidationProcessException("Name cannot be empty or only spaces");
     }
 
     private void validateDateOfBirth(LocalDate dateOfBirth) {
         LOGGER.trace("Validating dateOfBirth: {}", dateOfBirth);
 
         if (dateOfBirth == null)
-            throw new ValidationException("Date of birth cannot be null");
+            throw new ValidationProcessException("Date of birth cannot be null");
 
         if (dateOfBirth.isAfter(LocalDate.now()))
-            throw new ValidationException("Date of birth cannot be in the future");
+            throw new ValidationProcessException("Date of birth cannot be in the future");
     }
 
     private void validateEmail(String email) {
@@ -111,7 +111,7 @@ public class Validator {
 
         String regexPattern = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         if (!Pattern.compile(regexPattern).matcher(email).matches())
-            throw new ValidationException("Email is not a valid adress");
+            throw new ValidationProcessException("Email is not a valid adress");
     }
 
     private void validateOwnerId(Long ownerId) {
@@ -127,17 +127,17 @@ public class Validator {
         if (fatherId != null) {
             Horse father = horseDao.getOneById(fatherId);
             if (father.getSex() == Sex.female)
-                throw new ValidationException("Father has to be male");
+                throw new ValidationProcessException("Father has to be male");
             if (father.getDateOfBirth().isAfter(dateOfBirth))
-                throw new ValidationException("Father cannot be younger than horse");
+                throw new ValidationProcessException("Father cannot be younger than horse");
         }
 
         if (motherId != null) {
             Horse mother = horseDao.getOneById(motherId);
             if (mother.getSex() == Sex.male)
-                throw new ValidationException("Mother has to be female");
+                throw new ValidationProcessException("Mother has to be female");
             if (mother.getDateOfBirth().isAfter(dateOfBirth))
-                throw new ValidationException("Mother cannot be younger than horse");
+                throw new ValidationProcessException("Mother cannot be younger than horse");
         }
     }
 }
